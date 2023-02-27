@@ -61,7 +61,7 @@ class ShopsProvider extends ChangeNotifier {
     notifyListeners();
     await ApiServices.getMethodApi(
       "shops/GetShops?"
-      "pSalePersonID=18"
+      "pSalePersonID=${LoginProvider.getUser().userId}"
       "&pAreaID=0"
       "&pRegionID=4"
       "&pFromDate=2020-09-06 11:07:42.523"

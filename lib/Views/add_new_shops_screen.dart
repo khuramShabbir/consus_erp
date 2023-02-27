@@ -175,6 +175,7 @@ class _AddNewShopsState extends State<AddNewShops> {
                             initialValue: value.regionsList.first.name,
                             onChanged: (value) {
                               shopsProvider.areaCtrl.text = value.name;
+                              shopsProvider.areaCtrl.text = value.value.toString();
                             },
                           );
                   },
@@ -190,8 +191,11 @@ class _AddNewShopsState extends State<AddNewShops> {
                             dropDownList: value.channelList,
                             initialValue: value.channelList.first.name,
                             onChanged: (value) {
-                              shopsProvider.tradeChanelCtrl.text = value.name;
-                              shopsProvider.tradeChanelID = value.id;
+                              shopsProvider.tradeChanelCtrl.text = value.value.toString();
+
+                              logger.i(value.value);
+
+                              // shopsProvider.tradeChanelID = value.id;
                             },
                           );
                   },

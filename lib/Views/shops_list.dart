@@ -140,10 +140,19 @@ class _ShopsListState extends State<ShopsList> {
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                           child: !value.searching
-                              ? Icon(
-                                  Icons.sync,
-                                  color: Colors.white,
-                                  size: 25,
+                              ? Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      "Sync",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    Icon(
+                                      Icons.sync,
+                                      color: Colors.white,
+                                      size: 25,
+                                    ),
+                                  ],
                                 )
                               : AppWidgets.syncGif,
                         ),
@@ -168,27 +177,50 @@ class _ShopsListState extends State<ShopsList> {
 
             Expanded(child: Consumer<ShopsProvider>(
               builder: (BuildContext context, value, Widget? child) {
-                return ListView.builder(
-                  itemCount: shopProvider.getShopsData?.shopList.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final ShopData? shop = value.getShopsData?.shopList[index];
+                return value.getShopsData?.shopList.isNotEmpty == true
+                    ? ListView.builder(
+                        itemCount: shopProvider.getShopsData == null
+                            ? 0
+                            : shopProvider.getShopsData?.shopList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          final ShopData? shop = value.getShopsData?.shopList[index];
 
-                    if (shop!.shopName!
-                            .toLowerCase()
-                            .contains(value.shopSearchCtrl.text.toLowerCase()) ||
-                        value.shopSearchCtrl.text.isEmpty) {
-                      return Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: ShopCard(shop),
-                      );
-                    } else
-                      return SizedBox.shrink();
-                  },
-                );
+                          if (shop?.shopName != null &&
+                                  shop!.shopName!
+                                      .toLowerCase()
+                                      .contains(value.shopSearchCtrl.text.toLowerCase()) ||
+                              value.shopSearchCtrl.text.isEmpty) {
+                            return Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: ShopCard(shop),
+                            );
+                          } else
+                            return SizedBox.shrink();
+                        },
+                      )
+                    : noDataFound();
               },
             ))
           ],
         ),
+      ),
+    );
+  }
+
+  Widget noDataFound() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            "NO DATA FOUND",
+            style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
+          ),
+          Text(
+            "Please Sync Shops or Add Shops",
+            style: TextStyle(color: Colors.grey.withOpacity(.5)),
+          )
+        ],
       ),
     );
   }

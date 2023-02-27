@@ -34,8 +34,6 @@ class AddNewShopProvider extends ChangeNotifier {
   Position? position;
   AddShopResponse? addShopResponse;
 
-  String? tradeChanelID;
-
   /// Form Validation
 
   bool formValidation() {
@@ -84,7 +82,7 @@ class AddNewShopProvider extends ChangeNotifier {
       "GoogleAddress": geoLocationCtrl.text,
       "CreatedOn": DateTime.now().toString(),
       "UpdatedOn": DateTime.now().toString(),
-      "TradeChannelID": "4",
+      "TradeChannelID": tradeChanelCtrl.text,
       "Route": routeCtrl.text,
       "VPO": vpoCtrl.text,
       "SEO": seoCtrl.text
@@ -129,7 +127,7 @@ class AddNewShopProvider extends ChangeNotifier {
       "GoogleAddress": geoLocationCtrl.text,
       "CreatedOn": DateTime.now().toString(),
       "UpdatedOn": DateTime.now().toString(),
-      "TradeChannelID": "$tradeChanelID",
+      "TradeChannelID": "4",
       "Route": routeCtrl.text,
       "VPO": vpoCtrl.text,
       "SEO": seoCtrl.text

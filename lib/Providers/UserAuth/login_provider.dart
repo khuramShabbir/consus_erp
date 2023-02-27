@@ -10,8 +10,8 @@ import '/Model/UserAuth/user.dart';
 import '/Services/ApiServices/api_services.dart';
 
 class LoginProvider extends ChangeNotifier {
-  TextEditingController userNameCtrl = TextEditingController(text: "test123");
-  TextEditingController passwordCtrl = TextEditingController(text: "test123");
+  TextEditingController userNameCtrl = TextEditingController(text: "");
+  TextEditingController passwordCtrl = TextEditingController(text: "");
   GlobalKey<FormState> formKey = GlobalKey();
   bool rememberMe = false;
   LoginResponse? loginResponse;
@@ -25,27 +25,34 @@ class LoginProvider extends ChangeNotifier {
   /// Login
   Future<bool> login() async {
     if (formValidation()) {
-      Info.startProgress();
-      String response = await ApiServices.getMethodApi(
-        "${ApiUrls.VERIFY_USER}?username=${userNameCtrl.text.trim()}&password=${passwordCtrl.text.trim()}",
-      );
+      try {
+        Info.startProgress();
+        String response = await ApiServices.getMethodApi(
+          "${ApiUrls.VERIFY_USER}?username=${userNameCtrl.text.trim()}&password=${passwordCtrl.text.trim()}",
+        );
+        Info.stopProgress();
 
-      logger.i("Login Response>>>>>>>>  $response");
+        logger.i("Login Response>>>>>>>>  $response");
 
-      Info.stopProgress();
-      if (response.isEmpty) return false;
+        if (response.isEmpty) return false;
 
-      loginResponse = loginResponseFromJson(response);
+        loginResponse = loginResponseFromJson(response);
 
-      if (loginResponse?.user == null) {
-        await Info.errorSnackBar(loginResponse?.responseMessage ?? "Something Went Wrong");
-        return false;
-      }
-      if (loginResponse?.user != null) {
-        await saveUser(loginResponse!.user!);
-        await Info.successSnackBar(loginResponse?.responseMessage ?? "");
-        clearControllers();
-        return true;
+        if (loginResponse?.error == true || loginResponse?.user == null) {
+          await Info.errorSnackBar(loginResponse?.responseMessage ?? "Something Went Wrong");
+          return false;
+        }
+        if (loginResponse?.user != null) {
+          await saveUser(loginResponse!.user!);
+          await Info.successSnackBar(loginResponse?.responseMessage ?? "");
+          clearControllers();
+          return true;
+        }
+      } catch (e) {
+        logger.e(e);
+        await Info.errorSnackBar(e.toString());
+      } finally {
+        Info.stopProgress();
       }
     }
     return false;
