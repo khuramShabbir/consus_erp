@@ -8,9 +8,9 @@
 
 
    <application
-        android:label="consus_erp"
+        android:label="consusErp"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
        <meta-data android:name="com.google.android.geo.API_KEY"
            android:value="AIzaSyCqcZ7xj1BPJeC3Uyo2coGi9qaGNpyU_EA"/>
         <activity

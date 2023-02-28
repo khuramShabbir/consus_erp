@@ -1,9 +1,9 @@
 import 'dart:io';
 
+import 'package:consus_erp/Providers/AreaRegionTradeChannel/trade_channel_ares_regions.dart';
 import 'package:consus_erp/Providers/LocationServices/location_provider.dart';
 import 'package:consus_erp/Providers/ShopsProvider/add_new_shop_provider.dart';
 import 'package:consus_erp/Providers/ShopsProvider/shops_provider.dart';
-import 'package:consus_erp/Providers/ShopsProvider/trade_channel_and_regions.dart';
 import 'package:consus_erp/Providers/UserAuth/login_provider.dart';
 import 'package:consus_erp/localizations/app_localization_delegate.dart';
 import 'package:consus_erp/localizations/language.dart';
@@ -41,7 +41,7 @@ Future<void> main() async {
         ChangeNotifierProvider.value(value: ShopsProvider()),
         ChangeNotifierProvider.value(value: AddNewShopProvider()),
         ChangeNotifierProvider.value(value: LocationProvider()),
-        ChangeNotifierProvider.value(value: TradeChannelAndRegionsProvider()),
+        ChangeNotifierProvider.value(value: TradeChannelAreasRegionsProvider()),
       ],
       child: MyApp(),
     ),

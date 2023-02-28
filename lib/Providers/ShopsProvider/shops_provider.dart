@@ -12,6 +12,7 @@ class ShopsProvider extends ChangeNotifier {
   TextEditingController dateToCtrl = TextEditingController();
   String dateFrom = "";
   TextEditingController regionCtrl = TextEditingController();
+  TextEditingController areaCtrl = TextEditingController();
   TextEditingController shopSearchCtrl = TextEditingController();
   String dateTo = "";
   GetShops? getShopsData;
@@ -41,33 +42,16 @@ class ShopsProvider extends ChangeNotifier {
 
   bool searching = false;
 
-  Future<void> searchShops() async {
-    searching = true;
-    String response = await ApiServices.getMethodApi(
-      "Shops/GetShopsList?SalePersonID=${LoginProvider.getUser().userId}"
-      "&AreaID=0&RegionID=0&"
-      "FromDate=${dateFrom}&"
-      "ToDate=$dateTo",
-    );
-    searching = false;
-
-    logger.i("<<<<<Search Shop>>>>>$response");
-    if (response.isEmpty) return;
-    notifyListeners();
-  }
-
   Future<void> getShopsAndSave() async {
     searching = true;
     notifyListeners();
     await ApiServices.getMethodApi(
       "shops/GetShops?"
-      "pSalePersonID=${LoginProvider.getUser().userId}"
-      "&pAreaID=0"
-      "&pRegionID=4"
-      "&pFromDate=2020-09-06 11:07:42.523"
-      "&pToDate=2022-09-06 11:07:42.523"
+      "pSalePersonID=${LoginProvider.getUser().salePersonId}"
+      "&pAreaID=${areaCtrl.text}"
+      "&pRegionID=${LoginProvider.getUser().regionId}"
       "&startRowIndex=0"
-      "&maximumRows=50",
+      "&maximumRows=200",
     ).then((String value) async {
       searching = false;
       logger.i(value);

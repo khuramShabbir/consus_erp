@@ -1,5 +1,5 @@
+import 'package:consus_erp/Providers/AreaRegionTradeChannel/trade_channel_ares_regions.dart';
 import 'package:consus_erp/Providers/ShopsProvider/add_new_shop_provider.dart';
-import 'package:consus_erp/Providers/ShopsProvider/trade_channel_and_regions.dart';
 import 'package:consus_erp/Providers/UserAuth/login_provider.dart';
 import 'package:consus_erp/Views/Shops/view_saved_shops.dart';
 import 'package:consus_erp/Widgets/DropDownField/dropdown_textfield.dart';
@@ -21,6 +21,7 @@ class AddNewShops extends StatefulWidget {
 class _AddNewShopsState extends State<AddNewShops> {
   late ShopsController controller;
   late AddNewShopProvider shopsProvider;
+
   Stream<Position> getPositionStream({LocationSettings? locationSettings}) {
     return GeolocatorPlatform.instance.getPositionStream(
       locationSettings: locationSettings,
@@ -166,13 +167,21 @@ class _AddNewShopsState extends State<AddNewShops> {
                 ),
 
                 /// Area
-                Consumer<TradeChannelAndRegionsProvider>(
+                Consumer<TradeChannelAreasRegionsProvider>(
                   builder: (BuildContext context, value, Widget? child) {
-                    return value.regionsList.isEmpty
+                    return value.areasList.isEmpty
                         ? SizedBox()
                         : DropDownTextField(
-                            dropDownList: value.regionsList,
-                            initialValue: value.regionsList.first.name,
+                            label: "Area",
+                            dropDownList: value.areasList,
+                            initialValue: null,
+                            validator: (value) {
+                              if (shopsProvider.areaCtrl.text.isEmpty) {
+                                return "*Required";
+                              }
+                              return null;
+                            },
+                            autovalidateMode: AutovalidateMode.always,
                             onChanged: (value) {
                               shopsProvider.areaCtrl.text = value.name;
                               shopsProvider.areaCtrl.text = value.value.toString();
@@ -183,13 +192,21 @@ class _AddNewShopsState extends State<AddNewShops> {
 
                 /// Trade Chanel Consumer
 
-                Consumer<TradeChannelAndRegionsProvider>(
+                Consumer<TradeChannelAreasRegionsProvider>(
                   builder: (BuildContext context, value, Widget? child) {
                     return value.channelList.isEmpty
                         ? SizedBox()
                         : DropDownTextField(
                             dropDownList: value.channelList,
-                            initialValue: value.channelList.first.name,
+                            autovalidateMode: AutovalidateMode.always,
+                            label: "Trade Channel",
+                            validator: (value) {
+                              if (shopsProvider.tradeChanelCtrl.text.isEmpty) {
+                                return "*Required";
+                              }
+                              return null;
+                            },
+                            initialValue: null,
                             onChanged: (value) {
                               shopsProvider.tradeChanelCtrl.text = value.value.toString();
 

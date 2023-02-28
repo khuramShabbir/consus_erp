@@ -26,7 +26,7 @@ class AddNewShopProvider extends ChangeNotifier {
   TextEditingController vpoCtrl = TextEditingController(text: "LOW");
   TextEditingController seoCtrl = TextEditingController(text: "BROWN");
   TextEditingController latLngCtrl = TextEditingController();
-  TextEditingController geoLocationCtrl = TextEditingController(text: "");
+  TextEditingController geoLocationCtrl = TextEditingController();
   TextEditingController descriptionCtrl = TextEditingController();
   TextEditingController remarksCtrl = TextEditingController();
   TextEditingController systemNotesCtrl = TextEditingController();
@@ -67,9 +67,9 @@ class AddNewShopProvider extends ChangeNotifier {
       "ContactPerson": contactPersonCtrl.text,
       "ContactNo": contactNumberCtrl.text,
       "NTNNO": ntnNoCtrl.text,
-      "SalePersonID": LoginProvider.getUser().userId.toString(),
+      "SalePersonID": LoginProvider.getUser().salePersonId.toString(),
       "RegionID": LoginProvider.getUser().regionId.toString(),
-      "AreaID": "0",
+      "AreaID": areaCtrl.text,
       "CreatedBYID": LoginProvider.getUser().userId.toString(),
       "UpdatedByID": LoginProvider.getUser().userId.toString(),
       "Description": descriptionCtrl.text,
@@ -112,9 +112,9 @@ class AddNewShopProvider extends ChangeNotifier {
       "ContactPerson": contactPersonCtrl.text,
       "ContactNo": contactNumberCtrl.text,
       "NTNNO": ntnNoCtrl.text,
-      "SalePersonID": LoginProvider.getUser().userId.toString(),
+      "SalePersonID": LoginProvider.getUser().salePersonId.toString(),
       "RegionID": LoginProvider.getUser().regionId.toString(),
-      "AreaID": "0",
+      "AreaID": areaCtrl.text,
       "CreatedBYID": LoginProvider.getUser().userId.toString(),
       "UpdatedByID": LoginProvider.getUser().userId.toString(),
       "Description": descriptionCtrl.text,
@@ -127,11 +127,13 @@ class AddNewShopProvider extends ChangeNotifier {
       "GoogleAddress": geoLocationCtrl.text,
       "CreatedOn": DateTime.now().toString(),
       "UpdatedOn": DateTime.now().toString(),
-      "TradeChannelID": "4",
+      "TradeChannelID": tradeChanelCtrl.text,
       "Route": routeCtrl.text,
       "VPO": vpoCtrl.text,
       "SEO": seoCtrl.text
     };
+
+    logger.i(fields);
 
     if (box.hasData(LocalStorage.ADD_SHOP)) {
       shopList = box.read(LocalStorage.ADD_SHOP);
@@ -152,7 +154,7 @@ class AddNewShopProvider extends ChangeNotifier {
 
   bool loading = false;
 
-  /// Get Saved Shops
+  ///  Saved Shops
   Future<bool> submitSavedShop() async {
     try {
       loading = true;

@@ -1,6 +1,5 @@
 import 'package:consus_erp/Model/Shops/shop_model.dart';
 import 'package:consus_erp/Providers/ShopsProvider/shops_provider.dart';
-import 'package:consus_erp/Providers/ShopsProvider/trade_channel_and_regions.dart';
 import 'package:consus_erp/Providers/UserAuth/login_provider.dart';
 import 'package:consus_erp/Views/add_new_shops_screen.dart';
 import 'package:consus_erp/Widgets/DropDownField/dropdown_textfield.dart';
@@ -8,9 +7,12 @@ import 'package:consus_erp/Widgets/ShopCard/shop_card.dart';
 import 'package:consus_erp/Widgets/form_field.dart';
 import 'package:consus_erp/Widgets/static_widgets.dart';
 import 'package:consus_erp/theme/app_theme.dart';
+import 'package:consus_erp/utils/info_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+
+import '../Providers/AreaRegionTradeChannel/trade_channel_ares_regions.dart';
 
 class ShopsList extends StatefulWidget {
   const ShopsList({Key? key}) : super(key: key);
@@ -20,22 +22,24 @@ class ShopsList extends StatefulWidget {
 }
 
 class _ShopsListState extends State<ShopsList> {
-  late TradeChannelAndRegionsProvider tradeChannelProvider;
+  late TradeChannelAreasRegionsProvider tradeChannelProvider;
   late ShopsProvider shopProvider;
 
   @override
   void initState() {
-    tradeChannelProvider = Provider.of<TradeChannelAndRegionsProvider>(context, listen: false);
+    tradeChannelProvider = Provider.of<TradeChannelAreasRegionsProvider>(context, listen: false);
     shopProvider = Provider.of<ShopsProvider>(context, listen: false);
     shopProvider.getShopsFromLocal();
     tradeChannelProvider.getTradeChannel();
     tradeChannelProvider.getRegions();
+    tradeChannelProvider.getAreas();
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    logger.i(LoginProvider.getUser().salePersonId);
     return Scaffold(
       appBar: AppBar(
           title: Row(
@@ -105,7 +109,7 @@ class _ShopsListState extends State<ShopsList> {
                 ),
                 SizedBox(width: 10),
                 Expanded(
-                  child: Consumer<TradeChannelAndRegionsProvider>(
+                  child: Consumer<TradeChannelAreasRegionsProvider>(
                     builder: (BuildContext context, value, Widget? child) {
                       return value.regionsList.isEmpty
                           ? SizedBox()
@@ -114,13 +118,37 @@ class _ShopsListState extends State<ShopsList> {
                               dropDownList: value.regionsList,
                               initialValue: value.regionsList.first.name,
                               onChanged: (value) {
-                                shopProvider.regionCtrl.text = value.name;
+                                shopProvider.regionCtrl.text = value.value.toString();
                               },
                             );
                     },
                   ),
                 ),
               ],
+            ),
+
+            /// Area
+            Consumer<TradeChannelAreasRegionsProvider>(
+              builder: (BuildContext context, value, Widget? child) {
+                return value.areasList.isEmpty
+                    ? SizedBox()
+                    : DropDownTextField(
+                        label: "Area",
+                        dropDownList: value.areasList,
+                        initialValue: null,
+                        validator: (value) {
+                          if (shopProvider.areaCtrl.text.isEmpty) {
+                            return "*Required";
+                          }
+                          return null;
+                        },
+                        autovalidateMode: AutovalidateMode.always,
+                        onChanged: (value) {
+                          shopProvider.areaCtrl.text = value.name;
+                          shopProvider.areaCtrl.text = value.value.toString();
+                        },
+                      );
+              },
             ),
 
             /// Sync Shop
