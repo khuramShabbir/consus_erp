@@ -10,6 +10,8 @@ class LocalStorage {
 
   static String SAVE_ALL_SHOPS = "saveAllShops";
 
+  static String AREAS="AREAS";
+
   /// Instance of GetStorage
 
   /// Write Data Against String Key

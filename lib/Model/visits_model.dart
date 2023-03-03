@@ -177,7 +177,7 @@ class VisitsListApiResponse {
   List<AppVisitsList>? data;
   bool? isValid;
   bool? error;
-  Null? errorDetail;
+  Null errorDetail;
 
   VisitsListApiResponse(
       {this.responseMessage,

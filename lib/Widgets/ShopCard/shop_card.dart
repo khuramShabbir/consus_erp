@@ -33,10 +33,10 @@ class ShopCard extends StatelessWidget {
               padding: const EdgeInsets.all(10),
               child: Row(
                 children: [
-                  Icon(Icons.person),
+                  Icon(Icons.local_grocery_store),
                   SizedBox(width: 10),
                   Text(
-                    LoginProvider.getUser().fullName ?? "",
+                   shopData?.shopName ?? "",
                     style:
                         TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),
                   ),

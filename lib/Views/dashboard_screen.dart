@@ -1,24 +1,20 @@
 import 'dart:async';
 
-import 'package:consus_erp/Providers/ShopsProvider/shops_provider.dart';
-import 'package:consus_erp/Views/shops_list.dart';
-import 'package:consus_erp/data/database_helper.dart';
-import 'package:consus_erp/model/sale_person.dart';
-import 'package:consus_erp/theme/app_theme.dart';
-import 'package:consus_erp/theme/constant.dart';
-import 'package:consus_erp/utils/info_controller.dart';
-import 'package:consus_erp/views/orders_list.dart';
-import 'package:consus_erp/views/sync_data.dart';
-import 'package:consus_erp/widgets/syncfusion/data/charts_sample_data.dart';
+import '/Providers/ShopsProvider/shops_provider.dart';
+import '/Views/shops_list.dart';
+import '/theme/app_theme.dart';
+import '/theme/constant.dart';
+import '/utils/info_controller.dart';
+import '/views/orders_list.dart';
+import '/views/sync_data.dart';
+import '/widgets/syncfusion/data/charts_sample_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutx/flutx.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-
 import '../controllers/dashboard_controller.dart';
 import '../controllers/import_data_controller.dart';
-import '../model/user.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -31,14 +27,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
   late ThemeData theme;
   late DashboardController controller;
   late OutlineInputBorder outlineInputBorder;
-  User user = new User();
-  SalePerson salePersonData = new SalePerson();
   ImportDataFromJson importDataController = new ImportDataFromJson();
 
   @override
   void initState() {
     super.initState();
-    //getTotalShopCount();
     theme = AppTheme.shoppingManagerTheme;
 
     controller = FxControllerStore.putOrFind(DashboardController());
@@ -48,20 +41,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
         color: theme.dividerColor,
       ),
     );
-  }
-
-  void navigateToShopList() {
-    Route route = MaterialPageRoute(builder: (context) => ShopsList());
-    Navigator.push(context, route).then((onGoBack));
-  }
-
-  FutureOr onGoBack(dynamic value) {
-    setState(() {});
-  }
-
-  void getUserData() async {
-    // user = await StorageLocal.getUser();
-    salePersonData = await DatabaseHelper.instance.getSalePersonByUserID(user.userID!);
   }
 
   @override
@@ -81,8 +60,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       "Dashboard",
                       fontWeight: 600,
                     ),
-                    // FxSpacing.height(16),
-                    // alert(),
+
                     FxSpacing.height(16),
                     dashboardTiles(),
                     FxSpacing.height(16),
@@ -97,32 +75,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
         });
   }
 
-  Widget alert() {
-    return FxContainer(
-      color: Constant.softColors.green.color,
-      child: Row(
-        children: [
-          FxText.bodySmall(
-            'Alert: ',
-            color: Constant.softColors.green.onColor,
-            fontWeight: 700,
-          ),
-          FxText.bodySmall(
-            'Your shop is approved for outside delivery',
-            color: Constant.softColors.green.onColor,
-            fontWeight: 600,
-            fontSize: 11,
-          )
-        ],
-      ),
-    );
-  }
 
   Widget timeFilter() {
     return PopupMenuButton(
       color: theme.colorScheme.background,
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(Constant.containerRadius.small)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(Constant.containerRadius.small)),
       elevation: 1,
       child: FxContainer.bordered(
           paddingAll: 12,
@@ -181,13 +138,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                     FxSpacing.height(8),
                     FxText.titleLarge(
-                      '${Provider.of<ShopsProvider>(context, listen: false).getShopsData?.shopList.length}',
+                      Provider.of<ShopsProvider>(context, listen: false).getShopsData?.shopList.length.toString() ??
+                          "0",
                       fontWeight: 700,
                     ),
                   ],
                 ),
                 onTap: () {
-                  navigateToShopList();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ShopsList(),
+                    ),
+                  ).then((value) {
+                    setState(() {
+
+                    });
+                  });
                 },
               ),
             ),
@@ -213,9 +180,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                 ],
               ),
-              onTap: () {
-                //Navigator.push(context, MaterialPageRoute(builder: (context) => VisitsList()));
-              },
+              onTap: () {},
             )),
           ],
         ),

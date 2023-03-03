@@ -106,22 +106,20 @@ class _AddNewShopsState extends State<AddNewShops> {
           padding: EdgeInsets.fromLTRB(20, 25, 20, 20),
           child: Center(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 /// Sale Person Name
-                AppFormField(
-                  autoValidateMode: AutovalidateMode.always,
-                  readOnly: true,
-                  controller: shopsProvider.salePersonCtrl,
-                  labelText: "Sale Person",
-                  validator: (v) {
-                    if (v!.isEmpty) return "*Required";
-                    return null;
-                  },
+                Text(
+                  shopsProvider.salePersonCtrl.text,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
 
                 /// Shop Name
                 AppFormField(
-                  autoValidateMode: AutovalidateMode.always,
                   validator: (v) {
                     if (v!.isEmpty) return "*Required";
                     return null;
@@ -130,17 +128,9 @@ class _AddNewShopsState extends State<AddNewShops> {
                   controller: shopsProvider.shopNameCtrl,
                 ),
 
-                /// Shop Code
-                AppFormField(
-                  labelText: "Shop Code",
-                  controller: shopsProvider.shopCodeCtrl,
-                  readOnly: true,
-                ),
-
                 /// Contact Person
 
                 AppFormField(
-                  autoValidateMode: AutovalidateMode.always,
                   labelText: "Contact Person",
                   controller: shopsProvider.contactPersonCtrl,
                   validator: (v) {
@@ -151,7 +141,6 @@ class _AddNewShopsState extends State<AddNewShops> {
 
                 ///Contact Number
                 AppFormField(
-                  autoValidateMode: AutovalidateMode.always,
                   labelText: "Contact Number",
                   controller: shopsProvider.contactNumberCtrl,
                   validator: (v) {
@@ -218,41 +207,6 @@ class _AddNewShopsState extends State<AddNewShops> {
                   },
                 ),
 
-                /// Route
-                AppFormField(
-                  autoValidateMode: AutovalidateMode.always,
-                  labelText: "Route",
-                  controller: shopsProvider.routeCtrl,
-                  validator: (v) {
-                    if (v!.isEmpty) return "*Required";
-                    return null;
-                  },
-                ),
-
-                /// VPO
-                AppFormField(
-                  readOnly: true,
-                  autoValidateMode: AutovalidateMode.always,
-                  labelText: "VPO",
-                  controller: shopsProvider.vpoCtrl,
-                  validator: (v) {
-                    if (v!.isEmpty) return "*Required";
-                    return null;
-                  },
-                ),
-
-                /// SEO
-                AppFormField(
-                  autoValidateMode: AutovalidateMode.always,
-                  readOnly: true,
-                  labelText: "SEO",
-                  controller: shopsProvider.seoCtrl,
-                  validator: (v) {
-                    if (v!.isEmpty) return "*Required";
-                    return null;
-                  },
-                ),
-
                 /// Lnd and Lat
                 AppFormField(
                   autoValidateMode: AutovalidateMode.always,
@@ -267,32 +221,8 @@ class _AddNewShopsState extends State<AddNewShops> {
 
                 /// GEO Location
                 AppFormField(
-                  autoValidateMode: AutovalidateMode.always,
                   labelText: "Geo Location",
                   controller: shopsProvider.geoLocationCtrl,
-                  validator: (v) {
-                    if (v!.isEmpty) return "*Required";
-                    return null;
-                  },
-                ),
-
-                ///SystemNotes
-                AppFormField(
-                  labelText: "System Notes",
-                  controller: shopsProvider.systemNotesCtrl,
-                ),
-
-                /// Remarks
-                AppFormField(
-                  labelText: "Remarks",
-                  controller: shopsProvider.remarksCtrl,
-                ),
-
-                ///Description
-                AppFormField(
-                  labelText: "Description",
-                  controller: shopsProvider.descriptionCtrl,
-                  height: 500,
                 ),
               ],
             ),
@@ -302,11 +232,7 @@ class _AddNewShopsState extends State<AddNewShops> {
     );
   }
 
-  Widget actionButton(
-      {required VoidCallback onTap,
-      required String text,
-      required Color? buttonColor,
-      Icon? icon}) {
+  Widget actionButton({required VoidCallback onTap, required String text, required Color? buttonColor, Icon? icon}) {
     return Container(
       padding: EdgeInsets.fromLTRB(0, 0, 7, 0),
       child: ElevatedButton(

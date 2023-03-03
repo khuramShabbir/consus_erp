@@ -1,15 +1,15 @@
 import 'dart:io';
 
-import 'package:consus_erp/Providers/AreaRegionTradeChannel/trade_channel_ares_regions.dart';
-import 'package:consus_erp/Providers/LocationServices/location_provider.dart';
-import 'package:consus_erp/Providers/ShopsProvider/add_new_shop_provider.dart';
-import 'package:consus_erp/Providers/ShopsProvider/shops_provider.dart';
-import 'package:consus_erp/Providers/UserAuth/login_provider.dart';
-import 'package:consus_erp/localizations/app_localization_delegate.dart';
-import 'package:consus_erp/localizations/language.dart';
-import 'package:consus_erp/splash.dart';
-import 'package:consus_erp/theme/app_notifier.dart';
-import 'package:consus_erp/theme/app_theme.dart';
+import '/Providers/AreaRegionTradeChannel/trade_channel_ares_regions.dart';
+import '/Providers/LocationServices/location_provider.dart';
+import '/Providers/ShopsProvider/add_new_shop_provider.dart';
+import '/Providers/ShopsProvider/shops_provider.dart';
+import '/Providers/UserAuth/login_provider.dart';
+import '/localizations/app_localization_delegate.dart';
+import '/localizations/language.dart';
+import '/splash.dart';
+import '/theme/app_notifier.dart';
+import '/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -24,7 +24,7 @@ class MyHttpOverrides extends HttpOverrides {
       ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
   }
 }
-
+/// MAIN FOR RUN APP
 Future<void> main() async {
   HttpOverrides.global = new MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();

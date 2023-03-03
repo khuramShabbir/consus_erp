@@ -8,7 +8,7 @@ class TradeChannelApiResponse {
   List<TradeChannel>? data;
   bool? isValid;
   bool? error;
-  Null? errorDetail;
+  Null errorDetail;
 
   TradeChannelApiResponse(
       {this.responseMessage,

@@ -14,7 +14,7 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class AddNewShopProvider extends ChangeNotifier {
-  TextEditingController salePersonCtrl = TextEditingController();
+  TextEditingController salePersonCtrl = TextEditingController(text: LoginProvider.getUser().fullName);
   TextEditingController shopNameCtrl = TextEditingController();
   TextEditingController shopCodeCtrl = TextEditingController();
   TextEditingController contactPersonCtrl = TextEditingController();

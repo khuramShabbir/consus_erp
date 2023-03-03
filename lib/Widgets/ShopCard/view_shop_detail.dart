@@ -64,8 +64,6 @@ class ViewShopDetail extends StatelessWidget {
 
             /// Address
             detailTile("Address", shopData?.googleAddress),
-            detailTile("Address",
-                "shopData?.googleAddresssdfasdfh kdfhasd faksdf aksfaksjfgksadj vzxcbasjhrtweqiudsgajsdajfhdgsakfjhgas fasdkjfgaskd sdakj sakdf askdf kshd"),
 
             SizedBox(height: 100)
           ],

@@ -48,10 +48,10 @@ class ShopsProvider extends ChangeNotifier {
     await ApiServices.getMethodApi(
       "shops/GetShops?"
       "pSalePersonID=${LoginProvider.getUser().salePersonId}"
-      "&pAreaID=${areaCtrl.text}"
-      "&pRegionID=${LoginProvider.getUser().regionId}"
+      "&pAreaID=0"
+      "&pRegionID=0"
       "&startRowIndex=0"
-      "&maximumRows=200",
+      "&maximumRows=10",
     ).then((String value) async {
       searching = false;
       logger.i(value);

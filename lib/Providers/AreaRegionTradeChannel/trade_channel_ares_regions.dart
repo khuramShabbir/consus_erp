@@ -4,6 +4,7 @@ import 'package:consus_erp/Model/TradeChannel/trade_channel.dart';
 import 'package:consus_erp/Providers/UserAuth/login_provider.dart';
 import 'package:consus_erp/Services/ApiServices/api_services.dart';
 import 'package:consus_erp/Services/ApiServices/api_urls.dart';
+import 'package:consus_erp/Services/StorageServices/storage_services.dart';
 import 'package:consus_erp/Widgets/DropDownField/dropdown_textfield.dart';
 import 'package:consus_erp/utils/info_controller.dart';
 import 'package:flutter/cupertino.dart';
@@ -25,8 +26,7 @@ class TradeChannelAreasRegionsProvider extends ChangeNotifier {
 
     tradeChannels?.channel?.forEach(
       (element) {
-        channelList.add(
-            DropDownValueModel(name: element.channelName ?? "", value: element.tradeChannelId));
+        channelList.add(DropDownValueModel(name: element.channelName ?? "", value: element.tradeChannelId));
       },
     );
 
@@ -41,8 +41,7 @@ class TradeChannelAreasRegionsProvider extends ChangeNotifier {
 
     regionsResponse?.regions?.forEach(
       (element) {
-        regionsList
-            .add(DropDownValueModel(name: element.regionName ?? "", value: element.regionId));
+        regionsList.add(DropDownValueModel(name: element.regionName ?? "", value: element.regionId));
       },
     );
 
@@ -54,14 +53,25 @@ class TradeChannelAreasRegionsProvider extends ChangeNotifier {
         "Areas/GetAreaBySalePerson?SalePersonID=${LoginProvider.getUser().salePersonId}");
     logger.i("<<<<<<All GET_REGIONS >>>>>>$response");
     if (response.isEmpty) return;
-    getAreasResponse = getAreasResponseFromJson(response);
+  await  saveAreas(response);
 
+    getAreasFromLocal();
+    notifyListeners();
+  }
+
+  Future<void> saveAreas(String value) async {
+    await LocalStorage.box.write(LocalStorage.AREAS, value);
+    notifyListeners();
+  }
+
+  void getAreasFromLocal() {
+    if (LocalStorage.box.hasData(LocalStorage.AREAS))
+      getAreasResponse = getAreasResponseFromJson(LocalStorage.box.read(LocalStorage.AREAS));
     getAreasResponse?.areas?.forEach(
       (element) {
         areasList.add(DropDownValueModel(name: element.areaName ?? "", value: element.areaId));
       },
     );
-
     notifyListeners();
   }
 }

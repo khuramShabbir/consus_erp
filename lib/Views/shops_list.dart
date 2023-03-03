@@ -31,15 +31,14 @@ class _ShopsListState extends State<ShopsList> {
     shopProvider = Provider.of<ShopsProvider>(context, listen: false);
     shopProvider.getShopsFromLocal();
     tradeChannelProvider.getTradeChannel();
-    tradeChannelProvider.getRegions();
-    tradeChannelProvider.getAreas();
+    // tradeChannelProvider.getRegions();
+    // tradeChannelProvider.getAreas();
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    logger.i(LoginProvider.getUser().salePersonId);
     return Scaffold(
       appBar: AppBar(
           title: Row(
@@ -63,93 +62,15 @@ class _ShopsListState extends State<ShopsList> {
       body: Padding(
         padding: const EdgeInsets.all(10),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            /// USER NAME
+
+            Text(
+              LoginProvider.getUser().fullName ?? "",
+              style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
+            ),
             SizedBox(height: 10),
-
-            /// Date From + Date To
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //   children: [
-            //     Expanded(
-            //       child: AppFormField(
-            //         controller: shopProvider.dateFromCtrl,
-            //         prefixIcon: Icon(Icons.calendar_month),
-            //         labelText: "From",
-            //         readOnly: true,
-            //         onTap: () async {
-            //           await shopProvider.getFromDate();
-            //         },
-            //       ),
-            //     ),
-            //     SizedBox(width: 10),
-            //     Expanded(
-            //       child: AppFormField(
-            //         controller: shopProvider.dateToCtrl,
-            //         prefixIcon: Icon(Icons.calendar_month),
-            //         labelText: "To",
-            //         readOnly: true,
-            //         onTap: () async {
-            //           await shopProvider.getToDate();
-            //         },
-            //       ),
-            //     ),
-            //   ],
-            // ),
-            //
-            /// Sale Person + Region
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: AppFormField(
-                    labelText: "Sale Person",
-                    readOnly: true,
-                    controller: TextEditingController(text: LoginProvider.getUser().fullName),
-                  ),
-                ),
-                SizedBox(width: 10),
-                Expanded(
-                  child: Consumer<TradeChannelAreasRegionsProvider>(
-                    builder: (BuildContext context, value, Widget? child) {
-                      return value.regionsList.isEmpty
-                          ? SizedBox()
-                          : DropDownTextField(
-                              label: "Region",
-                              dropDownList: value.regionsList,
-                              initialValue: value.regionsList.first.name,
-                              onChanged: (value) {
-                                shopProvider.regionCtrl.text = value.value.toString();
-                              },
-                            );
-                    },
-                  ),
-                ),
-              ],
-            ),
-
-            /// Area
-            Consumer<TradeChannelAreasRegionsProvider>(
-              builder: (BuildContext context, value, Widget? child) {
-                return value.areasList.isEmpty
-                    ? SizedBox()
-                    : DropDownTextField(
-                        label: "Area",
-                        dropDownList: value.areasList,
-                        initialValue: null,
-                        validator: (value) {
-                          if (shopProvider.areaCtrl.text.isEmpty) {
-                            return "*Required";
-                          }
-                          return null;
-                        },
-                        autovalidateMode: AutovalidateMode.always,
-                        onChanged: (value) {
-                          shopProvider.areaCtrl.text = value.name;
-                          shopProvider.areaCtrl.text = value.value.toString();
-                        },
-                      );
-              },
-            ),
 
             /// Sync Shop
             Consumer<ShopsProvider>(
@@ -158,38 +79,8 @@ class _ShopsListState extends State<ShopsList> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    GestureDetector(
-                      onTap: () async {
-                        await value.getShopsAndSave();
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: CustomTheme.skyBlue, borderRadius: BorderRadius.circular(3)),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                          child: !value.searching
-                              ? Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      "Sync",
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                    Icon(
-                                      Icons.sync,
-                                      color: Colors.white,
-                                      size: 25,
-                                    ),
-                                  ],
-                                )
-                              : AppWidgets.syncGif,
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 10),
                     Expanded(
                       child: AppFormField(
-                        // controller: value.shopSearchCtrl,
                         labelText: "Search Shop",
                         onChanged: (String _value) {
                           value.searchShop(_value);
@@ -207,16 +98,12 @@ class _ShopsListState extends State<ShopsList> {
               builder: (BuildContext context, value, Widget? child) {
                 return value.getShopsData?.shopList.isNotEmpty == true
                     ? ListView.builder(
-                        itemCount: shopProvider.getShopsData == null
-                            ? 0
-                            : shopProvider.getShopsData?.shopList.length,
+                        itemCount: shopProvider.getShopsData == null ? 0 : shopProvider.getShopsData?.shopList.length,
                         itemBuilder: (BuildContext context, int index) {
                           final ShopData? shop = value.getShopsData?.shopList[index];
 
                           if (shop?.shopName != null &&
-                                  shop!.shopName!
-                                      .toLowerCase()
-                                      .contains(value.shopSearchCtrl.text.toLowerCase()) ||
+                                  shop!.shopName!.toLowerCase().contains(value.shopSearchCtrl.text.toLowerCase()) ||
                               value.shopSearchCtrl.text.isEmpty) {
                             return Padding(
                               padding: const EdgeInsets.all(10),
