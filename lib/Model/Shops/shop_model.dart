@@ -23,7 +23,6 @@ class ShopData {
     this.longitiude,
     this.googleAddress,
     this.tradeChannelId,
-    this.route,
     this.vpo,
     this.seo,
     this.imageUrl,
@@ -56,7 +55,6 @@ class ShopData {
   double? longitiude;
   String? googleAddress;
   int? tradeChannelId;
-  int? route;
   String? vpo;
   String? seo;
   String? imageUrl;
@@ -91,7 +89,6 @@ class ShopData {
         googleAddress: json["GoogleAddress"],
         tradeChannelId:
             json["TradeChannelID"] != null ? int.parse(json["TradeChannelID"].toString()) : null,
-        route: json["Route"] != null ? int.parse(json["Route"].toString()) : null,
         vpo: json["VPO"],
         seo: json["SEO"],
         imageUrl: json["ImageUrl"],
@@ -125,7 +122,6 @@ class ShopData {
         "Longitiude": longitiude,
         "GoogleAddress": googleAddress,
         "TradeChannelID": tradeChannelId,
-        "Route": route,
         "VPO": vpo,
         "SEO": seo,
         "ImageUrl": imageUrl,

@@ -19,20 +19,16 @@ class AddNewShops extends StatefulWidget {
 }
 
 class _AddNewShopsState extends State<AddNewShops> {
-  late ShopsController controller;
   late AddNewShopProvider shopsProvider;
-
-  Stream<Position> getPositionStream({LocationSettings? locationSettings}) {
-    return GeolocatorPlatform.instance.getPositionStream(
-      locationSettings: locationSettings,
-    );
-  }
+  late TradeChannelAreasRegionsProvider tradeChannelAreasRegionsProvider;
 
   @override
   void initState() {
     shopsProvider = Provider.of<AddNewShopProvider>(context, listen: false);
-
+    tradeChannelAreasRegionsProvider = Provider.of<TradeChannelAreasRegionsProvider>(context, listen: false);
     shopsProvider.salePersonCtrl.text = LoginProvider.getUser().fullName ?? "";
+    tradeChannelAreasRegionsProvider.getTradeChannelLocal();
+    tradeChannelAreasRegionsProvider.getAreasFromLocal();
     shopsProvider.getCurrentPosition();
     super.initState();
   }
@@ -72,19 +68,7 @@ class _AddNewShopsState extends State<AddNewShops> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            actionButton(
-                onTap: () async {
-                  final po = await getPositionStream();
-
-                  final p = await po.first;
-
-                  // Position? position = await Geolocator.getCurrentPosition();
-                  logger.i(p.latitude);
-
-                  // shopsProvider.submitSavedShop();
-                },
-                text: 'New Entry',
-                buttonColor: Colors.green[400]),
+            actionButton(onTap: () async {}, text: 'New Entry', buttonColor: Colors.green[400]),
             actionButton(
                 onTap: () {
                   shopsProvider.saveShop();
@@ -103,7 +87,7 @@ class _AddNewShopsState extends State<AddNewShops> {
       body: Form(
         key: shopsProvider.formKey,
         child: SingleChildScrollView(
-          padding: EdgeInsets.fromLTRB(20, 25, 20, 20),
+          padding: EdgeInsets.fromLTRB(20, 10, 20, 20),
           child: Center(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -116,6 +100,61 @@ class _AddNewShopsState extends State<AddNewShops> {
                     fontSize: 15,
                     fontWeight: FontWeight.bold,
                   ),
+                ),
+                SizedBox(height: 10),
+                Row(
+                  children: [
+                    /// Area
+                    Expanded(
+                      child: Consumer<TradeChannelAreasRegionsProvider>(
+                        builder: (BuildContext context, value, Widget? child) {
+                          return value.areasList.isEmpty
+                              ? Text("Please Sync Areas")
+                              : DropDownTextField(
+                                  label: "Area",
+                                  dropDownList: value.areasList,
+                                  initialValue: null,
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return "*Required";
+                                    }
+                                    return null;
+                                  },
+                                  autovalidateMode: AutovalidateMode.always,
+                                  onChanged: (value) {
+                                    shopsProvider.areaCtrl.text = value.name;
+                                    shopsProvider.areaCtrl.text = value.value.toString();
+                                  },
+                                );
+                        },
+                      ),
+                    ),
+                    SizedBox(width: 10),
+
+                    /// Trade Chanel Consumer
+
+                    Expanded(
+                      child: Consumer<TradeChannelAreasRegionsProvider>(
+                        builder: (BuildContext context, value, Widget? child) {
+                          return value.channelList.isEmpty
+                              ? Text("Please Sync TradeChannels")
+                              : DropDownTextField(
+                                  dropDownList: value.channelList,
+                                  autovalidateMode: AutovalidateMode.always,
+                                  label: "Trade Channel",
+                                  initialValue: "None",
+                                  onChanged: (value) {
+                                    shopsProvider.tradeChanelCtrl.text = value.value.toString();
+
+                                    logger.i(value.value);
+
+                                    // shopsProvider.tradeChanelID = value.id;
+                                  },
+                                );
+                        },
+                      ),
+                    ),
+                  ],
                 ),
 
                 /// Shop Name
@@ -133,14 +172,11 @@ class _AddNewShopsState extends State<AddNewShops> {
                 AppFormField(
                   labelText: "Contact Person",
                   controller: shopsProvider.contactPersonCtrl,
-                  validator: (v) {
-                    if (v!.isEmpty) return "*Required";
-                    return null;
-                  },
                 ),
 
                 ///Contact Number
                 AppFormField(
+                  keyboardType: TextInputType.number,
                   labelText: "Contact Number",
                   controller: shopsProvider.contactNumberCtrl,
                   validator: (v) {
@@ -153,58 +189,6 @@ class _AddNewShopsState extends State<AddNewShops> {
                 AppFormField(
                   labelText: "NTN No",
                   controller: shopsProvider.ntnNoCtrl,
-                ),
-
-                /// Area
-                Consumer<TradeChannelAreasRegionsProvider>(
-                  builder: (BuildContext context, value, Widget? child) {
-                    return value.areasList.isEmpty
-                        ? SizedBox()
-                        : DropDownTextField(
-                            label: "Area",
-                            dropDownList: value.areasList,
-                            initialValue: null,
-                            validator: (value) {
-                              if (shopsProvider.areaCtrl.text.isEmpty) {
-                                return "*Required";
-                              }
-                              return null;
-                            },
-                            autovalidateMode: AutovalidateMode.always,
-                            onChanged: (value) {
-                              shopsProvider.areaCtrl.text = value.name;
-                              shopsProvider.areaCtrl.text = value.value.toString();
-                            },
-                          );
-                  },
-                ),
-
-                /// Trade Chanel Consumer
-
-                Consumer<TradeChannelAreasRegionsProvider>(
-                  builder: (BuildContext context, value, Widget? child) {
-                    return value.channelList.isEmpty
-                        ? SizedBox()
-                        : DropDownTextField(
-                            dropDownList: value.channelList,
-                            autovalidateMode: AutovalidateMode.always,
-                            label: "Trade Channel",
-                            validator: (value) {
-                              if (shopsProvider.tradeChanelCtrl.text.isEmpty) {
-                                return "*Required";
-                              }
-                              return null;
-                            },
-                            initialValue: null,
-                            onChanged: (value) {
-                              shopsProvider.tradeChanelCtrl.text = value.value.toString();
-
-                              logger.i(value.value);
-
-                              // shopsProvider.tradeChanelID = value.id;
-                            },
-                          );
-                  },
                 ),
 
                 /// Lnd and Lat

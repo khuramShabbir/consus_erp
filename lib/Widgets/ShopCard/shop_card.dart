@@ -74,9 +74,7 @@ class ShopCard extends StatelessWidget {
 
                 shopTile("Created on", shopData?.createdOn.toString()),
 
-                /// Route
 
-                shopTile("Route", shopData?.route.toString()),
 
                 /// Area
                 shopTile("Area", shopData?.areaName),

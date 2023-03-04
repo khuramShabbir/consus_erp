@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:consus_erp/Providers/AreaRegionTradeChannel/trade_channel_ares_regions.dart';
 import 'package:consus_erp/Providers/ShopsProvider/shops_provider.dart';
 import 'package:consus_erp/controllers/sync_controller.dart';
 import 'package:consus_erp/utils/info_controller.dart';
@@ -26,6 +27,7 @@ class _SyncDataState extends State<SyncData> {
 
 
   late ShopsProvider shopsProvider;
+  late TradeChannelAreasRegionsProvider tradeChannelAreasRegionsProvider;
 
 
 
@@ -33,6 +35,7 @@ class _SyncDataState extends State<SyncData> {
   void initState() {
 
     shopsProvider=Provider.of<ShopsProvider>(context,listen: false);
+    tradeChannelAreasRegionsProvider=Provider.of<TradeChannelAreasRegionsProvider>(context,listen: false);
 
     // TODO: implement initState
     //IsInternetAvailable();
@@ -55,8 +58,8 @@ class _SyncDataState extends State<SyncData> {
         logger.i('Connected to internet');
         await  shopsProvider.getShopsAndSave();
 
-
-
+      await  tradeChannelAreasRegionsProvider.getAreas();
+      await  tradeChannelAreasRegionsProvider.getTradeChannel();
       }
       else{
         print('Disconnected from internet');
@@ -92,90 +95,19 @@ class _SyncDataState extends State<SyncData> {
               controlAffinity: ListTileControlAffinity.leading,
               secondary: Icon(FeatherIcons.shoppingBag)
             ),
-            // CheckboxListTile(
-            //     title: const Text('Sync Items'),
-            //     value: itemChecked,
-            //     onChanged: (bool? value){
-            //       setState(() {
-            //         itemChecked = value!;
-            //         importDataController.isSyncItem = itemChecked;
-            //       });
-            //     },
-            //     controlAffinity: ListTileControlAffinity.leading,
-            //     secondary: Icon(FeatherIcons.shoppingBag)
-            // ),
-            // CheckboxListTile(
-            //     title: const Text('Sync Branches'),
-            //     value: branchChecked,
-            //     onChanged: (bool? value){
-            //       setState(() {
-            //         branchChecked = value!;
-            //         importDataController.isSyncBranch = branchChecked;
-            //       });
-            //     },
-            //     controlAffinity: ListTileControlAffinity.leading,
-            //     secondary: Icon(FeatherIcons.shoppingBag)
-            // ),
-            // CheckboxListTile(
-            //     title: const Text('Sync Sale Persons'),
-            //     value: spChecked,
-            //     onChanged: (bool? value){
-            //       setState(() {
-            //         spChecked = value!;
-            //         importDataController.isSyncSp = spChecked;
-            //       });
-            //     },
-            //     controlAffinity: ListTileControlAffinity.leading,
-            //     secondary: Icon(FeatherIcons.shoppingBag)
-            // ),
-            // CheckboxListTile(
-            //     title: const Text('Sync Sale Person Detail'),
-            //     value: spDetailChecked,
-            //     onChanged: (bool? value){
-            //       setState(() {
-            //         spDetailChecked = value!;
-            //         importDataController.isSyncSpDetail = spDetailChecked;
-            //       });
-            //     },
-            //     controlAffinity: ListTileControlAffinity.leading,
-            //     secondary: Icon(FeatherIcons.shoppingBag)
-            // ),
-            // CheckboxListTile(
-            //     title: const Text('Sync Areas'),
-            //     value: areaChecked,
-            //     onChanged: (bool? value){
-            //       setState(() {
-            //         areaChecked = value!;
-            //         importDataController.isSyncArea = areaChecked;
-            //       });
-            //     },
-            //     controlAffinity: ListTileControlAffinity.leading,
-            //     secondary: Icon(FeatherIcons.shoppingBag)
-            // ),
-            // CheckboxListTile(
-            //     title: const Text('Sync Regions'),
-            //     value: regionChecked,
-            //     onChanged: (bool? value){
-            //       setState(() {
-            //         regionChecked = value!;
-            //         importDataController.isSyncRegion = regionChecked;
-            //       });
-            //     },
-            //     controlAffinity: ListTileControlAffinity.leading,
-            //     secondary: Icon(FeatherIcons.shoppingBag)
-            // ),
-            // CheckboxListTile(
-            //     title: const Text('Sync Trade Channels'),
-            //     value: tcChecked,
-            //     onChanged: (bool? value){
-            //       setState(() {
-            //         tcChecked = value!;
-            //         importDataController.isSyncTc = tcChecked;
-            //       });
-            //     },
-            //     controlAffinity: ListTileControlAffinity.leading,
-            //     secondary: Icon(FeatherIcons.shoppingBag)
-            // ),
+            CheckboxListTile(
+                title: const Text('Sync Areas'),
+                value: areaChecked,
+                onChanged: (bool? value){
+                  setState(() {
+                    areaChecked = value!;
+                    importDataController.isSyncArea = areaChecked;
+                  });
+                },
+                controlAffinity: ListTileControlAffinity.leading,
+                secondary: Icon(FeatherIcons.shoppingBag)
+            ),
+
             FxSpacing.height(70),
             ElevatedButton(onPressed: (){
 

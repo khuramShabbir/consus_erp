@@ -12,6 +12,8 @@ class LocalStorage {
 
   static String AREAS="AREAS";
 
+  static String Trade_Channel="Trade_Channel";
+
   /// Instance of GetStorage
 
   /// Write Data Against String Key

@@ -14,14 +14,15 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class AddNewShopProvider extends ChangeNotifier {
-  TextEditingController salePersonCtrl = TextEditingController(text: LoginProvider.getUser().fullName);
+
+  TextEditingController salePersonCtrl = TextEditingController();
   TextEditingController shopNameCtrl = TextEditingController();
   TextEditingController shopCodeCtrl = TextEditingController();
   TextEditingController contactPersonCtrl = TextEditingController();
   TextEditingController contactNumberCtrl = TextEditingController();
   TextEditingController ntnNoCtrl = TextEditingController();
   TextEditingController areaCtrl = TextEditingController();
-  TextEditingController tradeChanelCtrl = TextEditingController();
+  TextEditingController tradeChanelCtrl = TextEditingController(text: "0");
   TextEditingController routeCtrl = TextEditingController();
   TextEditingController vpoCtrl = TextEditingController(text: "LOW");
   TextEditingController seoCtrl = TextEditingController(text: "BROWN");

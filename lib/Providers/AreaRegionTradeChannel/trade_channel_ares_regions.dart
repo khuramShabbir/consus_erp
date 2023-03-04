@@ -18,37 +18,49 @@ class TradeChannelAreasRegionsProvider extends ChangeNotifier {
   List<DropDownValueModel> regionsList = <DropDownValueModel>[];
   List<DropDownValueModel> areasList = <DropDownValueModel>[];
 
-  void getTradeChannel() async {
+  Future<void> getTradeChannel() async {
     String response = await ApiServices.getMethodApi(ApiUrls.GET_TRADE_CHANNEL);
     logger.i("<<<<<<All Trade Channels>>>>>>$response");
     if (response.isEmpty) return;
-    tradeChannels = getAllTradeChannelResponseFromJson(response);
+   await saveTradeChannel(response);
+    getTradeChannelLocal();
+
+    notifyListeners();
+  }
+  Future<void> saveTradeChannel(String value) async {
+    await LocalStorage.box.write(LocalStorage.Trade_Channel, value);
+    notifyListeners();
+  }
+
+  void getTradeChannelLocal() {
+    if (LocalStorage.box.hasData(LocalStorage.Trade_Channel))
+      tradeChannels = getAllTradeChannelResponseFromJson(LocalStorage.box.read(LocalStorage.Trade_Channel));
 
     tradeChannels?.channel?.forEach(
-      (element) {
+          (element) {
         channelList.add(DropDownValueModel(name: element.channelName ?? "", value: element.tradeChannelId));
       },
     );
-
     notifyListeners();
   }
 
-  void getRegions() async {
-    String response = await ApiServices.getMethodApi(ApiUrls.GET_REGIONS + "0");
-    logger.i("<<<<<<All GET_REGIONS >>>>>>$response");
-    if (response.isEmpty) return;
-    regionsResponse = getAllRegionsResponseFromJson(response);
 
-    regionsResponse?.regions?.forEach(
-      (element) {
-        regionsList.add(DropDownValueModel(name: element.regionName ?? "", value: element.regionId));
-      },
-    );
+  // void getRegions() async {
+  //   String response = await ApiServices.getMethodApi(ApiUrls.GET_REGIONS + "0");
+  //   logger.i("<<<<<<All GET_REGIONS >>>>>>$response");
+  //   if (response.isEmpty) return;
+  //   regionsResponse = getAllRegionsResponseFromJson(response);
+  //
+  //   regionsResponse?.regions?.forEach(
+  //     (element) {
+  //       regionsList.add(DropDownValueModel(name: element.regionName ?? "", value: element.regionId));
+  //     },
+  //   );
+  //
+  //   notifyListeners();
+  // }
 
-    notifyListeners();
-  }
-
-  void getAreas() async {
+  Future<void> getAreas() async {
     String response = await ApiServices.getMethodApi(
         "Areas/GetAreaBySalePerson?SalePersonID=${LoginProvider.getUser().salePersonId}");
     logger.i("<<<<<<All GET_REGIONS >>>>>>$response");
