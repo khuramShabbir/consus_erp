@@ -23,9 +23,11 @@ class ImportDataFromJson extends FxController {
       isSyncSp = false,
       isSyncRegion = false,
       isSyncArea = false,
-      isSyncTc = false,
       isSyncedData = false;
+  bool isTradeChannel=false;
+
   String syncDate = "12-2-2023";
+
 
   @override
   void initState() {
@@ -422,54 +424,54 @@ class ImportDataFromJson extends FxController {
     }
   }
 
-  void syncData() async {
-    try {
-      Info.startProgress();
-      if (isSyncItem) {
-        await fetchItems();
-        await Future.delayed(Duration(seconds: 2));
-      }
-      if (isSyncBranch) {
-        await fetchBranches();
-        await Future.delayed(Duration(seconds: 2));
-      }
-      if (isSyncSp) {
-        await fetchSalePersons();
-        await Future.delayed(Duration(seconds: 2));
-      }
-      if (isSyncSpDetail) {
-        await fetchSalePersonDetail();
-        await Future.delayed(Duration(seconds: 2));
-      }
-      if (isSyncArea) {
-        await fetchAreas();
-        await Future.delayed(Duration(seconds: 2));
-      }
-      if (isSyncRegion) {
-        await fetchRegions();
-        await Future.delayed(Duration(seconds: 2));
-      }
-      if (isSyncTc) {
-        await fetchTcs();
-        await Future.delayed(Duration(seconds: 2));
-      }
-      if (isSyncShop) {
-        await fetchShops();
-        await syncShops();
-      }
-      if (isSyncedData) {
-        Info.stopProgress();
-        Info.successSnackBar('Data synced successfully!!!');
-      } else {
-        Info.stopProgress();
-        Info.infoSnackBar('Select Items for sync.');
-      }
-    } catch (e) {
-      Info.stopProgress();
-      Info.errorSnackBar(e.toString());
-      print(e.toString());
-    }
-  }
+  // void syncData() async {
+  //   try {
+  //     Info.startProgress();
+  //     if (isSyncItem) {
+  //       await fetchItems();
+  //       await Future.delayed(Duration(seconds: 2));
+  //     }
+  //     if (isSyncBranch) {
+  //       await fetchBranches();
+  //       await Future.delayed(Duration(seconds: 2));
+  //     }
+  //     if (isSyncSp) {
+  //       await fetchSalePersons();
+  //       await Future.delayed(Duration(seconds: 2));
+  //     }
+  //     if (isSyncSpDetail) {
+  //       await fetchSalePersonDetail();
+  //       await Future.delayed(Duration(seconds: 2));
+  //     }
+  //     if (isSyncArea) {
+  //       await fetchAreas();
+  //       await Future.delayed(Duration(seconds: 2));
+  //     }
+  //     if (isSyncRegion) {
+  //       await fetchRegions();
+  //       await Future.delayed(Duration(seconds: 2));
+  //     }
+  //     if (isSyncTc) {
+  //       await fetchTcs();
+  //       await Future.delayed(Duration(seconds: 2));
+  //     }
+  //     if (isSyncShop) {
+  //       await fetchShops();
+  //       await syncShops();
+  //     }
+  //     if (isSyncedData) {
+  //       Info.stopProgress();
+  //       Info.successSnackBar('Data synced successfully!!!');
+  //     } else {
+  //       Info.stopProgress();
+  //       Info.infoSnackBar('Select Items for sync.');
+  //     }
+  //   } catch (e) {
+  //     Info.stopProgress();
+  //     Info.errorSnackBar(e.toString());
+  //     print(e.toString());
+  //   }
+  // }
 
   void lastSyncDate() async {
     List<SyncDataModel> lst = await DatabaseHelper.instance.getSyncDataHistory();

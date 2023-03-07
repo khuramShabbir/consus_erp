@@ -7,8 +7,10 @@ import 'package:consus_erp/Providers/UserAuth/login_provider.dart';
 import 'package:consus_erp/Services/ApiServices/api_services.dart';
 import 'package:consus_erp/Services/ApiServices/api_urls.dart';
 import 'package:consus_erp/Services/StorageServices/storage_services.dart';
+import 'package:consus_erp/Widgets/DropDownField/dropdown_textfield.dart';
 import 'package:consus_erp/utils/info_controller.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -24,8 +26,8 @@ class AddNewShopProvider extends ChangeNotifier {
   TextEditingController areaCtrl = TextEditingController();
   TextEditingController tradeChanelCtrl = TextEditingController(text: "0");
   TextEditingController routeCtrl = TextEditingController();
-  TextEditingController vpoCtrl = TextEditingController(text: "LOW");
-  TextEditingController seoCtrl = TextEditingController(text: "BROWN");
+  TextEditingController vpoCtrl = TextEditingController(text: "");
+  TextEditingController seoCtrl = TextEditingController(text: "");
   TextEditingController latLngCtrl = TextEditingController();
   TextEditingController geoLocationCtrl = TextEditingController();
   TextEditingController descriptionCtrl = TextEditingController();
@@ -35,6 +37,27 @@ class AddNewShopProvider extends ChangeNotifier {
   Position? position;
   AddShopResponse? addShopResponse;
 
+  /// VPO LIST
+  List<DropDownValueModel> vpoList=<DropDownValueModel>[
+    DropDownValueModel(name: 'NONE', value: ''),
+    DropDownValueModel(name: 'LOW', value: 'LOW'),
+    DropDownValueModel(name: 'MEDIUM', value: 'MEDIUM'),
+    DropDownValueModel(name: 'HIGH', value: 'HIGH'),
+
+
+  ];
+
+  /// SEO LIST
+  List<DropDownValueModel> seoList=<DropDownValueModel>[
+    DropDownValueModel(name: 'NONE', value: ''),
+    DropDownValueModel(name: 'BROWN', value: 'BROWN'),
+    DropDownValueModel(name: 'SILVER', value: 'SILVER'),
+    DropDownValueModel(name: 'GOLDEN', value: 'GOLDEN'),
+    DropDownValueModel(name: 'DIAMOND', value: 'DIAMOND'),
+
+
+
+  ];
   /// Form Validation
 
   bool formValidation() {

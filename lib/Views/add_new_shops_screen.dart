@@ -1,5 +1,6 @@
 import 'package:consus_erp/Providers/AreaRegionTradeChannel/trade_channel_ares_regions.dart';
 import 'package:consus_erp/Providers/ShopsProvider/add_new_shop_provider.dart';
+import 'package:consus_erp/Providers/ShopsProvider/shops_provider.dart';
 import 'package:consus_erp/Providers/UserAuth/login_provider.dart';
 import 'package:consus_erp/Views/Shops/view_saved_shops.dart';
 import 'package:consus_erp/Widgets/DropDownField/dropdown_textfield.dart';
@@ -41,49 +42,55 @@ class _AddNewShopsState extends State<AddNewShops> {
           'Add New Shop',
           style: TextStyle(color: Colors.black, fontSize: 14),
         ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: Row(
-              children: [
-                actionButton(
-                  onTap: () {
-                    Get.to(() => ViewSavedShops());
-                  },
-                  text: "Saved Shops",
-                  buttonColor: Colors.green,
-                  icon: Icon(Icons.visibility, color: Colors.white),
-                ),
-              ],
-            ),
-          )
-        ],
+        // actions: [
+        //   Padding(
+        //     padding: const EdgeInsets.all(10),
+        //     child: Row(
+        //       children: [
+        //         actionButton(
+        //           onTap: () {
+        //             Get.to(() => ViewSavedShops());
+        //           },
+        //           text: "Saved Shops",
+        //           buttonColor: Colors.green,
+        //           icon: Icon(Icons.visibility, color: Colors.white),
+        //         ),
+        //       ],
+        //     ),
+        //   )
+        // ],
         //centerTitle: true,
       ),
       bottomNavigationBar:
 
           /// Actions Buttons
-          Padding(
-        padding: const EdgeInsets.all(10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            actionButton(onTap: () async {}, text: 'New Entry', buttonColor: Colors.green[400]),
-            actionButton(
-                onTap: () {
-                  shopsProvider.saveShop();
-                },
-                text: 'Save Entry',
-                buttonColor: Colors.blue[400]),
-            actionButton(
-                onTap: () {
-                  shopsProvider.addShop();
-                },
-                text: 'Submit',
-                buttonColor: Colors.tealAccent[400])
-          ],
-        ),
-      ),
+          (tradeChannelAreasRegionsProvider.areasList.isEmpty || tradeChannelAreasRegionsProvider.channelList.isEmpty)
+              ? syncInfo
+              : Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      actionButton(onTap: () async {}, text: 'New Entry', buttonColor: Colors.green[400]),
+                      actionButton(
+                          onTap: ()async {
+                         bool result=await   shopsProvider.saveShop();
+
+
+
+
+                          },
+                          text: 'Save Entry',
+                          buttonColor: Colors.blue[400]),
+                      actionButton(
+                          onTap: () {
+                            shopsProvider.addShop();
+                          },
+                          text: 'Submit',
+                          buttonColor: Colors.tealAccent[400])
+                    ],
+                  ),
+                ),
       body: Form(
         key: shopsProvider.formKey,
         child: SingleChildScrollView(
@@ -102,6 +109,8 @@ class _AddNewShopsState extends State<AddNewShops> {
                   ),
                 ),
                 SizedBox(height: 10),
+
+                /// Areas and Trade Channel
                 Row(
                   children: [
                     /// Area
@@ -157,6 +166,46 @@ class _AddNewShopsState extends State<AddNewShops> {
                   ],
                 ),
 
+                /// SEO AND VPO
+                Row(
+                  children: [
+                    /// VPO
+                    Expanded(
+                      child: Consumer<AddNewShopProvider>(
+                        builder: (BuildContext context, value, Widget? child) {
+                          return DropDownTextField(
+                            label: "VPO",
+                            dropDownList: value.vpoList,
+                            initialValue: "NONE",
+                            onChanged: (value) {
+                              shopsProvider.seoCtrl.text = value.value;
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                    SizedBox(width: 10),
+
+                    /// SEO
+
+                    Expanded(
+                      child: Consumer<AddNewShopProvider>(
+                        builder: (BuildContext context, value, Widget? child) {
+                          return DropDownTextField(
+                            dropDownList: value.seoList,
+                            label: "SEO",
+                            initialValue: "NONE",
+
+                            onChanged: (value) {
+                              shopsProvider.seoCtrl.text = value.value;
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+
                 /// Shop Name
                 AppFormField(
                   validator: (v) {
@@ -205,6 +254,7 @@ class _AddNewShopsState extends State<AddNewShops> {
 
                 /// GEO Location
                 AppFormField(
+                  readOnly: true,
                   labelText: "Geo Location",
                   controller: shopsProvider.geoLocationCtrl,
                 ),
@@ -236,4 +286,12 @@ class _AddNewShopsState extends State<AddNewShops> {
       ),
     );
   }
+
+  Padding syncInfo = Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 20),
+    child: Text(
+      "Please Sync Shops, Areas and Trade Channels before add new shops",
+      style: TextStyle(color: Colors.red),
+    ),
+  );
 }

@@ -41,15 +41,10 @@ class ShopCard extends StatelessWidget {
                         TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),
                   ),
                   Expanded(child: SizedBox()),
-                  GestureDetector(
-                    onTap: () {
-                      Get.to(() => ViewShopDetail(shopData));
-                    },
-                    child: Text(
-                      "View Detail",
-                      style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
-                    ),
-                  )
+                  shopData?.isSync==true ?Icon(Icons.check_circle,color: Colors.green):
+                  Icon(Icons.info,color: Colors.redAccent)
+
+
                 ],
               ),
             ),
@@ -82,10 +77,40 @@ class ShopCard extends StatelessWidget {
                 /// Address
                 shopTile("Address", shopData?.googleAddress),
 
-                /// Address
               ],
             ),
-          )
+          ),
+                    Padding(padding: EdgeInsets.all(10),child:
+
+            Align(
+              alignment: Alignment.bottomRight,
+              child: GestureDetector(
+
+                onTap: () {
+
+                  Get.to(() => ViewShopDetail(shopData));
+
+                },
+
+                child: Text(
+
+                  "View Detail",
+
+                  style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+
+                ),
+
+              ),
+            )
+
+
+
+
+
+
+
+            ,)
+
         ],
       ),
     );

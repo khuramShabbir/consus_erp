@@ -11,7 +11,10 @@ class ApiServices {
 
     http.StreamedResponse response = await request.send();
     String res = await response.stream.bytesToString();
+    logger.i(response.contentLength);
+
     if (response.statusCode == 200 || response.statusCode == 201) {
+
       return res;
     } else {
       logger.e(res);
@@ -27,7 +30,7 @@ class ApiServices {
     request.headers.addAll(headers);
 
     http.StreamedResponse response = await request.send();
-    logger.i(response.statusCode);
+    logger.i(response.contentLength);
     if (response.statusCode == 200) {
       return await response.stream.bytesToString();
     } else {

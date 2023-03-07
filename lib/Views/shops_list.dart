@@ -30,9 +30,7 @@ class _ShopsListState extends State<ShopsList> {
     tradeChannelProvider = Provider.of<TradeChannelAreasRegionsProvider>(context, listen: false);
     shopProvider = Provider.of<ShopsProvider>(context, listen: false);
     shopProvider.getShopsFromLocal();
-    tradeChannelProvider.getTradeChannel();
-    // tradeChannelProvider.getRegions();
-    // tradeChannelProvider.getAreas();
+
 
     super.initState();
   }
@@ -121,7 +119,7 @@ class _ShopsListState extends State<ShopsList> {
       ),
     );
   }
-
+/// NO DATA FOUND
   Widget noDataFound() {
     return Center(
       child: Column(

@@ -15,7 +15,6 @@ class TradeChannelAreasRegionsProvider extends ChangeNotifier {
   GetAreasResponse? getAreasResponse;
 
   List<DropDownValueModel> channelList = <DropDownValueModel>[];
-  List<DropDownValueModel> regionsList = <DropDownValueModel>[];
   List<DropDownValueModel> areasList = <DropDownValueModel>[];
 
   Future<void> getTradeChannel() async {
@@ -41,7 +40,7 @@ class TradeChannelAreasRegionsProvider extends ChangeNotifier {
         channelList.add(DropDownValueModel(name: element.channelName ?? "", value: element.tradeChannelId));
       },
     );
-    notifyListeners();
+    Future.delayed(Duration.zero,()=>notifyListeners());
   }
 
 
@@ -84,6 +83,6 @@ class TradeChannelAreasRegionsProvider extends ChangeNotifier {
         areasList.add(DropDownValueModel(name: element.areaName ?? "", value: element.areaId));
       },
     );
-    notifyListeners();
+    Future.delayed(Duration.zero,()=>notifyListeners());
   }
 }

@@ -30,10 +30,13 @@ class ShopData {
     this.salePersonName,
     this.areaName,
     this.channelName,
+    this.isSync=true,
+    this.totalRows
   });
-
+bool? isSync;
   int? id;
   int? shopId;
+  int? totalRows;
   String? shopName;
   String? shopCode;
   String? contactPerson;
@@ -64,6 +67,7 @@ class ShopData {
   String? channelName;
 
   factory ShopData.fromJson(Map<String, dynamic> json) => ShopData(
+        isSync: json["isSync"],
         id: json["ID"] != null ? int.parse(json["ID"].toString()) : null,
         shopId: json["ShopID"] != null ? int.parse(json["ShopID"].toString()) : null,
         shopName: json["ShopName"],
@@ -73,8 +77,8 @@ class ShopData {
         NTNno: json["NTNNO"],
         regionId: json["RegionID"] != null ? int.parse(json["RegionID"].toString()) : null,
         areaId: json["AreaID"] != null ? int.parse(json["AreaID"].toString()) : null,
-        salePersonId:
-            json["SalePersonID"] != null ? int.parse(json["SalePersonID"].toString()) : null,
+        salePersonId: json["SalePersonID"] != null ? int.parse(json["SalePersonID"].toString()) : null,
+        totalRows: json["TotalRows"] != null ? int.parse(json["TotalRows"].toString()) : null,
         createdById: json["CreatedByID"] != null ? int.parse(json["CreatedByID"].toString()) : null,
         updatedById: json["UpdatedByID"] != null ? int.parse(json["UpdatedByID"].toString()) : null,
         createdOn: json["CreatedOn"] != null ? DateTime.parse(json["CreatedOn"].toString()) : null,
@@ -100,6 +104,7 @@ class ShopData {
 
   Map<String, dynamic> toJson() => {
         "ID": id,
+        "isSync": isSync,
         "ShopID": shopId,
         "ShopName": shopName,
         "ShopCode": shopCode,

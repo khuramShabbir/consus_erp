@@ -55,8 +55,6 @@ class ViewShopDetail extends StatelessWidget {
 
             infoTile("Created on", shopData?.createdOn.toString()),
 
-
-
             /// Area
             infoTile("Area", shopData?.areaName),
 

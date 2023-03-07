@@ -10,6 +10,8 @@ import 'package:flutx/flutx.dart';
 import 'package:provider/provider.dart';
 
 import '../controllers/import_data_controller.dart';
+import 'package:percent_indicator/percent_indicator.dart';
+
 
 class SyncData extends StatefulWidget {
   const SyncData({Key? key}) : super(key: key);
@@ -22,7 +24,7 @@ class _SyncDataState extends State<SyncData> {
   dataSynchronization syncController = new dataSynchronization();
   ImportDataFromJson importDataController = new ImportDataFromJson();
   bool shopChecked = true, itemChecked = true, branchChecked = true, regionChecked = true,
-  areaChecked = true, spChecked = true, tcChecked = true, spDetailChecked = true;
+  areaChecked = true, spChecked = true, tcChecked = true, spDetailChecked = true, tradeChannel=true;
   /// TODO:
 
 
@@ -40,26 +42,15 @@ class _SyncDataState extends State<SyncData> {
     // TODO: implement initState
     //IsInternetAvailable();
     super.initState();
-    setState(() {
-      importDataController.isSyncShop = shopChecked;
-      importDataController.isSyncItem = itemChecked;
-      importDataController.isSyncBranch = branchChecked;
-      importDataController.isSyncRegion = regionChecked;
-      importDataController.isSyncArea = areaChecked;
-      importDataController.isSyncSp = spChecked;
-      importDataController.isSyncTc = tcChecked;
-      importDataController.isSyncSpDetail = spDetailChecked;
-    });
   }
 
   Future IsInternetAvailable() async{
     await syncController.isInternet().then((connection)async{
       if(connection){
         logger.i('Connected to internet');
-        await  shopsProvider.getShopsAndSave();
-
-      await  tradeChannelAreasRegionsProvider.getAreas();
-      await  tradeChannelAreasRegionsProvider.getTradeChannel();
+     if(shopChecked)   await  shopsProvider.getShopsViaPagination();
+     if(areaChecked)   await  tradeChannelAreasRegionsProvider.getAreas();
+     if(tradeChannel)  await  tradeChannelAreasRegionsProvider.getTradeChannel();
       }
       else{
         print('Disconnected from internet');
@@ -95,6 +86,15 @@ class _SyncDataState extends State<SyncData> {
               controlAffinity: ListTileControlAffinity.leading,
               secondary: Icon(FeatherIcons.shoppingBag)
             ),
+             Consumer<ShopsProvider>(builder: (BuildContext context, value, Widget? child) { return
+
+              value.searching? LinearPercentIndicator(percent: value.progressValue):SizedBox.shrink();
+
+
+             },),
+
+
+
             CheckboxListTile(
                 title: const Text('Sync Areas'),
                 value: areaChecked,
@@ -102,6 +102,18 @@ class _SyncDataState extends State<SyncData> {
                   setState(() {
                     areaChecked = value!;
                     importDataController.isSyncArea = areaChecked;
+                  });
+                },
+                controlAffinity: ListTileControlAffinity.leading,
+                secondary: Icon(FeatherIcons.shoppingBag)
+            ),
+            CheckboxListTile(
+                title: const Text('Sync Trade Channel'),
+                value: tradeChannel,
+                onChanged: (bool? value){
+                  setState(() {
+                    tradeChannel = value!;
+                    importDataController.isTradeChannel = tradeChannel;
                   });
                 },
                 controlAffinity: ListTileControlAffinity.leading,
