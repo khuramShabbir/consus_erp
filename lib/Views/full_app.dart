@@ -23,7 +23,6 @@ class _ShoppingManagerFullAppState extends State<ShoppingManagerFullApp>
   void initState() {
     super.initState();
     Provider.of<LocationProvider>(context, listen: false).getCurrentPosition();
-    Provider.of<ShopsProvider>(context, listen: false).getShopsFromLocal();
 
     controller = FxControllerStore.putOrFind(FullAppController(this));
     theme = AppTheme.shoppingManagerTheme;

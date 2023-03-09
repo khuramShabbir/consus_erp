@@ -53,7 +53,11 @@ class ViewShopDetail extends StatelessWidget {
 
             /// Created on
 
-            infoTile("Created on", shopData?.createdOn.toString()),
+            infoTile("Created on",
+                "${shopData?.createdOn?.month}/"
+                    "${shopData?.createdOn?.day}"
+                    "/${shopData?.createdOn?.year}"),
+
 
             /// Area
             infoTile("Area", shopData?.areaName),

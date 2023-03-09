@@ -105,7 +105,7 @@ class _ShopsListState extends State<ShopsList> {
                               value.shopSearchCtrl.text.isEmpty) {
                             return Padding(
                               padding: const EdgeInsets.all(10),
-                              child: ShopCard(shop),
+                              child: ShopCard(shop,index: index+1,),
                             );
                           } else
                             return SizedBox.shrink();

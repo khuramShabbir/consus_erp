@@ -1,39 +1,39 @@
 class ShopData {
-  ShopData({
-    this.id,
-    this.shopId,
-    this.shopName,
-    this.shopCode,
-    this.contactPerson,
-    this.contactNo,
-    this.NTNno,
-    this.regionId,
-    this.areaId,
-    this.salePersonId,
-    this.createdById,
-    this.updatedById,
-    this.createdOn,
-    this.updatedOn,
-    this.systemNotes,
-    this.remarks,
-    this.description,
-    this.entryDate,
-    this.branchId,
-    this.latitiude,
-    this.longitiude,
-    this.googleAddress,
-    this.tradeChannelId,
-    this.vpo,
-    this.seo,
-    this.imageUrl,
-    this.isModify,
-    this.salePersonName,
-    this.areaName,
-    this.channelName,
-    this.isSync=true,
-    this.totalRows
-  });
-bool? isSync;
+  ShopData(
+      {this.id,
+      this.shopId,
+      this.shopName,
+      this.shopCode,
+      this.contactPerson,
+      this.contactNo,
+      this.NTNno,
+      this.regionId,
+      this.areaId,
+      this.salePersonId,
+      this.createdById,
+      this.updatedById,
+      this.createdOn,
+      this.updatedOn,
+      this.systemNotes,
+      this.remarks,
+      this.description,
+      this.entryDate,
+      this.branchId,
+      this.latitiude,
+      this.longitiude,
+      this.googleAddress,
+      this.tradeChannelId,
+      this.vpo,
+      this.seo,
+      this.imageUrl,
+      this.isModify,
+      this.salePersonName,
+      this.areaName,
+      this.channelName,
+      this.isSync = true,
+      this.totalRows});
+
+  bool? isSync;
   int? id;
   int? shopId;
   int? totalRows;
@@ -67,7 +67,7 @@ bool? isSync;
   String? channelName;
 
   factory ShopData.fromJson(Map<String, dynamic> json) => ShopData(
-        isSync: json["isSync"],
+        isSync: json["isSync"] != null ? json["isSync"].toString().parseBool() : true,
         id: json["ID"] != null ? int.parse(json["ID"].toString()) : null,
         shopId: json["ShopID"] != null ? int.parse(json["ShopID"].toString()) : null,
         shopName: json["ShopName"],
@@ -91,8 +91,7 @@ bool? isSync;
         latitiude: json["Latitiude"] != null ? double.parse(json["Latitiude"].toString()) : null,
         longitiude: json["Longitiude"] != null ? double.parse(json["Longitiude"].toString()) : null,
         googleAddress: json["GoogleAddress"],
-        tradeChannelId:
-            json["TradeChannelID"] != null ? int.parse(json["TradeChannelID"].toString()) : null,
+        tradeChannelId: json["TradeChannelID"] != null ? int.parse(json["TradeChannelID"].toString()) : null,
         vpo: json["VPO"],
         seo: json["SEO"],
         imageUrl: json["ImageUrl"],
@@ -135,4 +134,16 @@ bool? isSync;
         "AreaName": areaName,
         "ChannelName": channelName,
       };
+}
+
+extension BoolParsing on String {
+  bool parseBool() {
+    if (this.toLowerCase() == 'true') {
+      return true;
+    } else if (this.toLowerCase() == 'false') {
+      return false;
+    }
+
+    throw '"$this" can not be parsed to boolean.';
+  }
 }

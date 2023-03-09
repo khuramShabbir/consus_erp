@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:consus_erp/Providers/AreaRegionTradeChannel/trade_channel_ares_regions.dart';
-import 'package:consus_erp/Providers/ShopsProvider/shops_provider.dart';
-import 'package:consus_erp/controllers/sync_controller.dart';
-import 'package:consus_erp/utils/info_controller.dart';
+import '/Providers/AreaRegionTradeChannel/trade_channel_ares_regions.dart';
+import '/Providers/ShopsProvider/shops_provider.dart';
+import '/controllers/sync_controller.dart';
+import '/utils/info_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutx/flutx.dart';
@@ -48,7 +48,15 @@ class _SyncDataState extends State<SyncData> {
     await syncController.isInternet().then((connection)async{
       if(connection){
         logger.i('Connected to internet');
-     if(shopChecked)   await  shopsProvider.getShopsViaPagination();
+     if(shopChecked)
+    {
+
+      await addNewShopProvider.submitSavedShop();
+      await shopsProvider.getShopsViaPagination();
+
+
+
+    }
      if(areaChecked)   await  tradeChannelAreasRegionsProvider.getAreas();
      if(tradeChannel)  await  tradeChannelAreasRegionsProvider.getTradeChannel();
       }

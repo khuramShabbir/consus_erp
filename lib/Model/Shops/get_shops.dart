@@ -4,12 +4,14 @@ import 'package:consus_erp/Model/Shops/shop_model.dart';
 
 GetShops getShopsFromJson(String str) => GetShops.fromJson(json.decode(str));
 
-String getShopsToJson(GetShops data) => json.encode(data.toJson());
+String convertShopsToJson(GetShops data) {
+  return json.encode(data.toJson());
+}
 
 class GetShops {
   GetShops({
     this.responseMessage,
-    this.shopList = const [],
+    this.shopList = const<ShopData> [],
     this.isValid,
     this.error,
     this.errorDetail,
@@ -31,13 +33,15 @@ class GetShops {
         errorDetail: json["ErrorDetail"],
       );
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() {
+    return {
         "ResponseMessage": responseMessage,
         "Data": shopList.isNotEmpty
-            ? List<ShopData>.from(shopList.map((x) => x.toJson()))
-            : <ShopData>[],
+            ? List<dynamic>.from(shopList.map((x) => x.toJson()))
+            : [],
         "IsValid": isValid,
         "Error": error,
         "ErrorDetail": errorDetail,
       };
+  }
 }

@@ -33,6 +33,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void initState() {
     super.initState();
     theme = AppTheme.shoppingManagerTheme;
+    Provider.of<ShopsProvider>(context, listen: false).getShopsFromLocal();
 
     controller = FxControllerStore.putOrFind(DashboardController());
     outlineInputBorder = OutlineInputBorder(
@@ -137,11 +138,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       muted: true,
                     ),
                     FxSpacing.height(8),
-                    FxText.titleLarge(
-                      Provider.of<ShopsProvider>(context, listen: false).getShopsData?.shopList.length.toString() ??
-                          "0",
+                    Consumer<ShopsProvider>(builder: (BuildContext context, value, Widget? child) { return FxText.titleLarge(
+                     "${value.totalShops}",
                       fontWeight: 700,
-                    ),
+                    ); },),
                   ],
                 ),
                 onTap: () {

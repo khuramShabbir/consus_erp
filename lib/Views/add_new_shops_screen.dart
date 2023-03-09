@@ -42,24 +42,7 @@ class _AddNewShopsState extends State<AddNewShops> {
           'Add New Shop',
           style: TextStyle(color: Colors.black, fontSize: 14),
         ),
-        // actions: [
-        //   Padding(
-        //     padding: const EdgeInsets.all(10),
-        //     child: Row(
-        //       children: [
-        //         actionButton(
-        //           onTap: () {
-        //             Get.to(() => ViewSavedShops());
-        //           },
-        //           text: "Saved Shops",
-        //           buttonColor: Colors.green,
-        //           icon: Icon(Icons.visibility, color: Colors.white),
-        //         ),
-        //       ],
-        //     ),
-        //   )
-        // ],
-        //centerTitle: true,
+
       ),
       bottomNavigationBar:
 
@@ -71,20 +54,29 @@ class _AddNewShopsState extends State<AddNewShops> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      actionButton(onTap: () async {}, text: 'New Entry', buttonColor: Colors.green[400]),
                       actionButton(
-                          onTap: ()async {
-                         bool result=await   shopsProvider.saveShop();
-
-
-
-
+                          onTap: () async {
+                            Get.defaultDialog(
+                                barrierDismissible: true,
+                                content: Text("Do you want to cancel?"),
+                                onCancel: () {},
+                                onConfirm: () {
+                                  addNewShopProvider.clearCtrl();
+                                  Get.back();
+                                });
+                          },
+                          text: 'New Entry',
+                          buttonColor: Colors.green[400]),
+                      actionButton(
+                          onTap: () async {
+                            bool result = await shopsProvider.saveShop();
                           },
                           text: 'Save Entry',
                           buttonColor: Colors.blue[400]),
                       actionButton(
                           onTap: () {
-                            shopsProvider.addShop();
+                             shopsProvider.addShop();
+
                           },
                           text: 'Submit',
                           buttonColor: Colors.tealAccent[400])
@@ -133,6 +125,8 @@ class _AddNewShopsState extends State<AddNewShops> {
                                   onChanged: (value) {
                                     shopsProvider.areaCtrl.text = value.name;
                                     shopsProvider.areaCtrl.text = value.value.toString();
+
+                                    logger.i(int.parse(value.value.toString()));
                                   },
                                 );
                         },
@@ -195,7 +189,6 @@ class _AddNewShopsState extends State<AddNewShops> {
                             dropDownList: value.seoList,
                             label: "SEO",
                             initialValue: "NONE",
-
                             onChanged: (value) {
                               shopsProvider.seoCtrl.text = value.value;
                             },

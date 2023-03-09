@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:consus_erp/Model/Shops/add_new_shop.dart';
+import 'package:consus_erp/Model/Shops/get_shops.dart';
 import 'package:consus_erp/Model/Shops/shop_model.dart';
 import 'package:consus_erp/Providers/LocationServices/location_provider.dart';
+import 'package:consus_erp/Providers/ShopsProvider/shops_provider.dart';
 import 'package:consus_erp/Providers/UserAuth/login_provider.dart';
 import 'package:consus_erp/Services/ApiServices/api_services.dart';
 import 'package:consus_erp/Services/ApiServices/api_urls.dart';
@@ -15,8 +17,9 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-class AddNewShopProvider extends ChangeNotifier {
+ShopsProvider shopProv = Provider.of<ShopsProvider>(Get.context!, listen: false);
 
+class AddNewShopProvider extends ChangeNotifier {
   TextEditingController salePersonCtrl = TextEditingController();
   TextEditingController shopNameCtrl = TextEditingController();
   TextEditingController shopCodeCtrl = TextEditingController();
@@ -38,26 +41,22 @@ class AddNewShopProvider extends ChangeNotifier {
   AddShopResponse? addShopResponse;
 
   /// VPO LIST
-  List<DropDownValueModel> vpoList=<DropDownValueModel>[
+  List<DropDownValueModel> vpoList = <DropDownValueModel>[
     DropDownValueModel(name: 'NONE', value: ''),
     DropDownValueModel(name: 'LOW', value: 'LOW'),
     DropDownValueModel(name: 'MEDIUM', value: 'MEDIUM'),
     DropDownValueModel(name: 'HIGH', value: 'HIGH'),
-
-
   ];
 
   /// SEO LIST
-  List<DropDownValueModel> seoList=<DropDownValueModel>[
+  List<DropDownValueModel> seoList = <DropDownValueModel>[
     DropDownValueModel(name: 'NONE', value: ''),
     DropDownValueModel(name: 'BROWN', value: 'BROWN'),
     DropDownValueModel(name: 'SILVER', value: 'SILVER'),
     DropDownValueModel(name: 'GOLDEN', value: 'GOLDEN'),
     DropDownValueModel(name: 'DIAMOND', value: 'DIAMOND'),
-
-
-
   ];
+
   /// Form Validation
 
   bool formValidation() {
@@ -67,13 +66,11 @@ class AddNewShopProvider extends ChangeNotifier {
 
   /// Get Current Location
   Future<bool> getCurrentPosition() async {
-    position =
-        await Provider.of<LocationProvider>(Get.context!, listen: false).getCurrentPosition();
+    position = await Provider.of<LocationProvider>(Get.context!, listen: false).getCurrentPosition();
     if (position == null) return false;
 
     latLngCtrl.text = "${position?.latitude},${position?.longitude}";
-    geoLocationCtrl.text =
-        "${Provider.of<LocationProvider>(Get.context!, listen: false).currentAddress}";
+    geoLocationCtrl.text = "${Provider.of<LocationProvider>(Get.context!, listen: false).currentAddress}";
 
     return true;
   }
@@ -109,7 +106,7 @@ class AddNewShopProvider extends ChangeNotifier {
       "TradeChannelID": tradeChanelCtrl.text,
       "Route": routeCtrl.text,
       "VPO": vpoCtrl.text,
-      "SEO": seoCtrl.text
+      "SEO": seoCtrl.text,
     };
 
     shopList.add(fields);
@@ -154,72 +151,65 @@ class AddNewShopProvider extends ChangeNotifier {
       "TradeChannelID": tradeChanelCtrl.text,
       "Route": routeCtrl.text,
       "VPO": vpoCtrl.text,
-      "SEO": seoCtrl.text
+      "SEO": seoCtrl.text,
+      "isSync": false.toString(),
     };
-
-    logger.i(fields);
-
-    if (box.hasData(LocalStorage.ADD_SHOP)) {
-      shopList = box.read(LocalStorage.ADD_SHOP);
-      shopList.add(fields);
-      await box.write(LocalStorage.ADD_SHOP, shopList);
+    ShopData shopData = ShopData.fromJson(fields);
+    if (LocalStorage.box.hasData(LocalStorage.SAVE_ALL_SHOPS)) {
+      String data = LocalStorage.box.read(LocalStorage.SAVE_ALL_SHOPS);
+      GetShops getShops = getShopsFromJson(data);
+      getShops.shopList.insert(0, shopData);
+      Map<String, dynamic> shopMap = GetShops(shopList: getShops.shopList).toJson();
+      String je = json.encode(shopMap);
+      await box.write(LocalStorage.SAVE_ALL_SHOPS, je);
+      shopProv.getShopsFromLocal();
     } else {
-      shopList.add(fields);
-
-      await box.write(LocalStorage.ADD_SHOP, shopList);
+      return false;
     }
 
     clearCtrl();
-
     Info.successSnackBar("Shop Saved");
-
     return true;
   }
 
   bool loading = false;
 
   ///  Saved Shops
+  List<ShopData> unSyncShops = <ShopData>[];
+
   Future<bool> submitSavedShop() async {
-    try {
-      loading = true;
-      notifyListeners();
-      if (box.hasData(LocalStorage.ADD_SHOP)) {
-        shopList = box.read(LocalStorage.ADD_SHOP);
+    unSyncShops = <ShopData>[];
+    if (LocalStorage.box.hasData(LocalStorage.SAVE_ALL_SHOPS)) {
+      String data = LocalStorage.box.read(LocalStorage.SAVE_ALL_SHOPS);
+      GetShops getShops = getShopsFromJson(data);
+      getShops.shopList.forEach((element) {
+        if (element.isSync == false) {
+          unSyncShops.add(element);
+        }
+      });
 
-        if (shopList.isEmpty) return false;
-        String response = await ApiServices.postRawMethodApiForLocal(shopList, ApiUrls.ADD_SHOP);
-
+      if (unSyncShops.isNotEmpty) {
+        String response = await ApiServices.postRawMethodApiForLocal(unSyncShops, ApiUrls.ADD_SHOP);
+        logger.wtf("<<<<<<<add Shop>>>>>>>>$response");
         if (response.isEmpty) return false;
-
-        box.remove(LocalStorage.ADD_SHOP);
         shopList = [];
-        shopDataList = <ShopData>[];
-        Info.successSnackBar("Shops Submitted");
-
         notifyListeners();
-
-        return true;
+        clearCtrl();
       }
-    } catch (e) {
-    } finally {
-      loading = false;
-      notifyListeners();
     }
 
     return false;
   }
 
-  List<ShopData>? shopDataList;
+  List<ShopData> shopDataList = <ShopData>[];
 
   void getSavedShops() {
     shopList = [];
 
     if (box.hasData(LocalStorage.ADD_SHOP)) {
-      shopList = jsonDecode(jsonEncode(box.read(LocalStorage.ADD_SHOP)));
-
+      shopList = json.decode(json.encode(box.read(LocalStorage.ADD_SHOP)));
       shopDataList = shopsListFromJson(json.encode(shopList));
     } else {}
-
     Future.delayed(Duration.zero, () {
       notifyListeners();
     });
@@ -231,8 +221,6 @@ class AddNewShopProvider extends ChangeNotifier {
     contactPersonCtrl.clear();
     contactNumberCtrl.clear();
     ntnNoCtrl.clear();
-    areaCtrl.clear();
-    tradeChanelCtrl.clear();
     routeCtrl.clear();
   }
 }

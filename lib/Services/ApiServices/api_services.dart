@@ -11,7 +11,6 @@ class ApiServices {
 
     http.StreamedResponse response = await request.send();
     String res = await response.stream.bytesToString();
-    logger.i(response.contentLength);
 
     if (response.statusCode == 200 || response.statusCode == 201) {
 

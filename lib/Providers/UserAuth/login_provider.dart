@@ -85,7 +85,7 @@ class LoginProvider extends ChangeNotifier {
 
   /// Check if user already login
   Future<bool> checkUserStatus() async {
-    if (LocalStorage.box.hasData(LocalStorage.remember)) {
+    if (LocalStorage.box.hasData(LocalStorage.userData)) {
       return true;
     }
     return false;
@@ -93,7 +93,9 @@ class LoginProvider extends ChangeNotifier {
 
   /// LogoOut User
   Future<bool> logout() async {
-    await LocalStorage.box.erase();
+    // await LocalStorage.box.erase();
+    LocalStorage.box.remove(LocalStorage.userData);
+
     await Info.successSnackBar("User Logged Successfully");
     return true;
   }
