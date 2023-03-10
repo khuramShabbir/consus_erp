@@ -1,10 +1,10 @@
 import 'dart:io';
 
-import 'package:consus_erp/controllers/visits_controller.dart';
-import 'package:consus_erp/model/sale_person.dart';
-import 'package:consus_erp/model/shops_model.dart';
-import 'package:consus_erp/model/visits_model.dart';
-import 'package:consus_erp/utils/info_controller.dart';
+import '/controllers/visits_controller.dart';
+import '/model/sale_person.dart';
+import '/model/shops_model.dart';
+import '/model/visits_model.dart';
+import '/utils/info_controller.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

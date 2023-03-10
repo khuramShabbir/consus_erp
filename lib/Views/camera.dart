@@ -1,6 +1,5 @@
 import 'package:camera/camera.dart';
-import 'package:consus_erp/utils/info_controller.dart';
-import 'package:consus_erp/views/visits_screen.dart';
+import '/utils/info_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
