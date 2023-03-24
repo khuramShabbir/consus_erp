@@ -1,6 +1,8 @@
 import 'package:consus_erp/Model/AreasAndregion/get_all_regions.dart';
 import 'package:consus_erp/Model/AreasAndregion/get_areas.dart';
+import 'package:consus_erp/Model/Items/get_items.dart';
 import 'package:consus_erp/Model/TradeChannel/trade_channel.dart';
+import 'package:consus_erp/Model/items.dart';
 import 'package:consus_erp/Providers/UserAuth/login_provider.dart';
 import 'package:consus_erp/Services/ApiServices/api_services.dart';
 import 'package:consus_erp/Services/ApiServices/api_urls.dart';
@@ -13,9 +15,11 @@ class TradeChannelAreasRegionsProvider extends ChangeNotifier {
   GetAllTradeChannelResponse? tradeChannels;
   GetAllRegionsResponse? regionsResponse;
   GetAreasResponse? getAreasResponse;
+  GetItemsData? getItemsData;
 
   List<DropDownValueModel> channelList = <DropDownValueModel>[];
   List<DropDownValueModel> areasList = <DropDownValueModel>[];
+  List<ItemsModel> lstItems = <ItemsModel>[];
 
   Future<void> getTradeChannel() async {
     String response = await ApiServices.getMethodApi(ApiUrls.GET_TRADE_CHANNEL);
@@ -42,22 +46,33 @@ class TradeChannelAreasRegionsProvider extends ChangeNotifier {
     );
     Future.delayed(Duration.zero,()=>notifyListeners());
   }
+  
+  Future<void> getItemsList() async{
+    String response = await ApiServices.getMethodApi("${ApiUrls.IMPORT_ITEMS}?itemid=0");
+    logger.i("<<<All Items Response>>> $response");
+    if(response.isEmpty) return;
+    saveItemsToLocal(response);
+    getItemsFromLocal();
+    notifyListeners();
+  }
 
+  void saveItemsToLocal(String response) async{
+    if(response.isEmpty) return;
+    await LocalStorage.box.write(LocalStorage.Add_Items, response);
+    notifyListeners();
+  }
 
-  // void getRegions() async {
-  //   String response = await ApiServices.getMethodApi(ApiUrls.GET_REGIONS + "0");
-  //   logger.i("<<<<<<All GET_REGIONS >>>>>>$response");
-  //   if (response.isEmpty) return;
-  //   regionsResponse = getAllRegionsResponseFromJson(response);
-  //
-  //   regionsResponse?.regions?.forEach(
-  //     (element) {
-  //       regionsList.add(DropDownValueModel(name: element.regionName ?? "", value: element.regionId));
-  //     },
-  //   );
-  //
-  //   notifyListeners();
-  // }
+  void getItemsFromLocal(){
+    lstItems = <ItemsModel>[];
+    if(!LocalStorage.box.hasData(LocalStorage.Add_Items)) return;
+    String data = LocalStorage.box.read(LocalStorage.Add_Items);
+    logger.i(data);
+    getItemsData = getItemsDataFromJson(data);
+    getItemsData!.data!.forEach((element) {
+      lstItems.add(element);
+    });
+    Future.delayed(Duration.zero,()=>notifyListeners());
+  }
 
   Future<void> getAreas() async {
     String response = await ApiServices.getMethodApi(

@@ -6,6 +6,8 @@ class LocalStorage {
   static String userData = "userData";
   static String remember = "remember";
   static String ADD_SHOP = "add_shop";
+  static String ADD_ORDERS = "add_orders";
+  static String Add_Items = "add_items";
   static final box = GetStorage();
 
   static String SAVE_ALL_SHOPS = "saveAllShops";

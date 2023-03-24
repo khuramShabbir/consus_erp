@@ -1,11 +1,13 @@
 import 'dart:async';
 
+import 'package:consus_erp/Providers/OrdersProvider/orders_provider.dart';
+
 import '/Providers/ShopsProvider/shops_provider.dart';
 import '/Views/shops_list.dart';
 import '/theme/app_theme.dart';
 import '/theme/constant.dart';
 import '/utils/info_controller.dart';
-import '/views/orders_list.dart';
+import '/views/Orders/orders_list.dart';
 import '/views/sync_data.dart';
 import '/widgets/syncfusion/data/charts_sample_data.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +17,7 @@ import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import '../controllers/dashboard_controller.dart';
 import '../controllers/import_data_controller.dart';
+import 'package:get/get.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -34,6 +37,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     super.initState();
     theme = AppTheme.shoppingManagerTheme;
     Provider.of<ShopsProvider>(context, listen: false).getShopsFromLocal();
+    Provider.of<OrdersProvider>(context, listen: false).getOrdersFromLocal();
 
     controller = FxControllerStore.putOrFind(DashboardController());
     outlineInputBorder = OutlineInputBorder(
@@ -200,14 +204,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       muted: true,
                     ),
                     FxSpacing.height(8),
-                    FxText.titleLarge(
-                      '1220',
-                      fontWeight: 700,
+                    Consumer<OrdersProvider>(
+                      builder: (BuildContext context, value, Widget? child){
+                        return FxText.titleLarge(
+                          '${value.totalOrders}',
+                          fontWeight: 700,
+                        );
+                      },
                     ),
                   ],
                 ),
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => OrdersList()));
+                  Get.to(() => OrdersList());
                 },
               ),
             ),

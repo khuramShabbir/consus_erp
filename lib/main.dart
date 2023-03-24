@@ -1,5 +1,8 @@
 import 'dart:io';
 
+import 'package:consus_erp/Providers/OrdersProvider/add_new_order_provider.dart';
+import 'package:consus_erp/Providers/OrdersProvider/orders_provider.dart';
+
 import '/Providers/AreaRegionTradeChannel/trade_channel_ares_regions.dart';
 import '/Providers/LocationServices/location_provider.dart';
 import '/Providers/ShopsProvider/add_new_shop_provider.dart';
@@ -42,6 +45,8 @@ Future<void> main() async {
         ChangeNotifierProvider.value(value: AddNewShopProvider()),
         ChangeNotifierProvider.value(value: LocationProvider()),
         ChangeNotifierProvider.value(value: TradeChannelAreasRegionsProvider()),
+        ChangeNotifierProvider.value(value: OrdersProvider()),
+        ChangeNotifierProvider.value(value: AddNewOrderProvider()),
       ],
       child: MyApp(),
     ),

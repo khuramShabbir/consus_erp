@@ -4,7 +4,7 @@ import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:flutx/flutx.dart';
 
 import '../views/dashboard_screen.dart';
-import '../views/orders_list.dart';
+import '../views/Orders/orders_list.dart';
 import '../views/profile_screen.dart';
 import '../views/shops_list.dart';
 import '../views/visits_list.dart';

@@ -20,6 +20,8 @@ class ApiUrls {
   static String DELETE_VISITS_BY_VISIT_ID = "Visits/DeleteVisits";
   static String GET_SALE_PERSON_BY_ID = "SalePersons/GetSalePersonByID";
   static String GET_SHOPS_BY_ID = "Shops/GetShopsByID";
+  static String GET_ORDERS_LIST = "Orders/GetOrdersList";
+  static String Save_Orders = "Orders/SaveOrders";
 
   static String ADD_SHOP = "/shops/InsertUpdateShops";
 

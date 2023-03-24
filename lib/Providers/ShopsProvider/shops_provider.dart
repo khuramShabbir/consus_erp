@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:consus_erp/Providers/ShopsProvider/add_new_shop_provider.dart';
+import 'package:consus_erp/Widgets/DropDownField/dropdown_textfield.dart';
 import 'package:provider/provider.dart';
 
 import '/Model/Shops/get_shops.dart';
@@ -23,10 +24,12 @@ class ShopsProvider extends ChangeNotifier {
   String dateFrom = "";
   TextEditingController regionCtrl = TextEditingController();
   TextEditingController areaCtrl = TextEditingController();
+  TextEditingController shopsValue = TextEditingController();
   TextEditingController shopSearchCtrl = TextEditingController();
   String dateTo = "";
   GetShops? getShopsData;
   int totalShops = 0;
+  List<DropDownValueModel> lstShops = <DropDownValueModel>[];
 
   void searchShop(String value) {
     shopSearchCtrl.text = value;
@@ -132,5 +135,16 @@ class ShopsProvider extends ChangeNotifier {
     Future.delayed(Duration.zero, () {});
     totalShops = getShopsData!.shopList.length;
     notifyListeners();
+  }
+
+  void fillShopsDropDown() async{
+    lstShops = <DropDownValueModel>[];
+    if(!LocalStorage.box.hasData(LocalStorage.SAVE_ALL_SHOPS)) return;
+    String data = await LocalStorage.box.read(LocalStorage.SAVE_ALL_SHOPS);
+    getShopsData = getShopsFromJson(data);
+    getShopsData?.shopList.forEach((element) {
+      lstShops.add(DropDownValueModel(name: element!.shopName!, value: element.shopId));
+    });
+    Future.delayed(Duration.zero, ()=>notifyListeners());
   }
 }

@@ -23,7 +23,8 @@ class ImportDataFromJson extends FxController {
       isSyncSp = false,
       isSyncRegion = false,
       isSyncArea = false,
-      isSyncedData = false;
+      isSyncedData = false,
+      isSyncOrders = false;
   bool isTradeChannel=false;
 
   String syncDate = "12-2-2023";
